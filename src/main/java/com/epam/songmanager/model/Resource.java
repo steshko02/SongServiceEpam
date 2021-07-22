@@ -2,10 +2,13 @@ package com.epam.songmanager.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @Entity
 public class Resource {
@@ -20,10 +23,6 @@ public class Resource {
 
     private  String checksum;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
-    private  Song song;
-
     public  Resource(){
-
     }
 }

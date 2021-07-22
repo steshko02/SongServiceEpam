@@ -1,11 +1,11 @@
 package com.epam.songmanager.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @Entity
 @Table(name="songs")
@@ -21,15 +21,21 @@ public class Song {
 
     private String notes;
 
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
+    @ManyToOne (optional=false)
     private  Album album;
 
-    @OneToOne(optional = false, mappedBy = "song")
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "resource_id")
     private  Resource resource;
 
     public Song(){
-
     }
 
+    public Song(String name, int year, String notes, Album album, Resource resource) {
+        this.name = name;
+        this.year = year;
+        this.notes = notes;
+        this.album = album;
+        this.resource = resource;
+    }
 }
