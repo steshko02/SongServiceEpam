@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 
 @Controller
@@ -35,12 +37,12 @@ public class testController {
 
 
 
-//    @GetMapping("/test")
-//    public String  testRes() throws IOException, NoSuchAlgorithmException {
-//        resourceService.addResource("C:\\Users\\stesh\\OneDrive\\Рабочий стол\\Король и Шут - Ели Мясо Мужики.mp3");
-//
-//        return "all is OK!";
-//    }
+    @GetMapping("/test")
+    public String  testRes() throws IOException, NoSuchAlgorithmException {
+        //resourceService.addResource("C:\\Users\\stesh\\OneDrive\\Рабочий стол\\dajte-tank-ya.mp3");
+
+        return "all is OK!";
+    }
 
 //    @GetMapping("/test2")
 //    public String  testSong() {
@@ -57,22 +59,20 @@ public class testController {
 //        return "all is OK!";
 //    }
 
-    @RequestMapping(value = "test3/{songId}", method = RequestMethod.GET, produces = {
-            MediaType.APPLICATION_OCTET_STREAM_VALUE })
-    public ResponseEntity playAudio(HttpServletRequest request, HttpServletResponse response,
-                                    @PathVariable("songId") Long songId) throws FileNotFoundException {
-
-        Song song = songRepository.getById(songId);
-
-        String str = song.getName();
-        long length = song.getResource().getSize();
-
-        InputStreamResource inputStreamResource = new InputStreamResource( new FileInputStream(song.getResource().getPath()));
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentLength(length);
-        httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
-        return new ResponseEntity(inputStreamResource, httpHeaders, HttpStatus.OK);
-    }
+//    @RequestMapping(value = "test3/{songId}", method = RequestMethod.GET, produces = {
+//            MediaType.APPLICATION_OCTET_STREAM_VALUE })
+//    public ResponseEntity playAudio(@PathVariable("songId") Long songId) throws FileNotFoundException {
+//
+//        Song song = songRepository.getById(songId);
+//
+//        long length = song.getResource().getSize();
+//
+//        InputStreamResource inputStreamResource = new InputStreamResource( new FileInputStream(song.getResource().getPath()));
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.setContentLength(length);
+//        httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
+//        return new ResponseEntity(inputStreamResource, httpHeaders, HttpStatus.OK);
+//    }
 
     @GetMapping("/test4")
     public String  testSong1() {

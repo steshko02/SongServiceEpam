@@ -24,8 +24,9 @@ public class Genre {
         this.name=name;
     }
 
-    @ManyToMany(mappedBy = "genres", cascade=CascadeType.ALL)
+    @ManyToMany(mappedBy = "genres")
     private Set<Album> albums = new HashSet<>();
+
 
 
 }

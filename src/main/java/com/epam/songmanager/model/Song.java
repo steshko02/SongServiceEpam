@@ -24,7 +24,7 @@ public class Song {
     @ManyToOne (optional=false)
     private  Album album;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "resource_id")
     private  Resource resource;
 

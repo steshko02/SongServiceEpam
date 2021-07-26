@@ -31,14 +31,14 @@ public class Album {
 //    private List<Song> songs;
 
     @ManyToMany
-    @JoinTable(name="arist_album", joinColumns=@JoinColumn(name="artist_id"),
-            inverseJoinColumns=@JoinColumn(name="album_id"))
+    @JoinTable(name="arist_album", joinColumns=@JoinColumn(name="album_id"),
+            inverseJoinColumns=@JoinColumn(name="artist_id"))
     private Set<Artist> artists = new HashSet<>();
 
 
     @ManyToMany
-    @JoinTable(name="genre_album", joinColumns=@JoinColumn(name="genre_id"),
-            inverseJoinColumns=@JoinColumn(name="album_id"))
+    @JoinTable(name="genre_album", joinColumns=@JoinColumn(name="album_id"),
+            inverseJoinColumns=@JoinColumn(name="genre_id"))
     private Set<Genre> genres = new HashSet<>();
 
     public Album(){

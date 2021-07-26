@@ -4,6 +4,7 @@ import com.epam.songmanager.model.Artist;
 import com.epam.songmanager.model.Genre;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ArtistService {
 
@@ -11,5 +12,5 @@ public interface ArtistService {
     Long edit(Artist artist,Long id);
     Artist get(Long id);
     Long[] delete(Long ...id);
-    List<Genre> getByFilters(String name, Long[] id);
+    Set<Artist> getByFullFilter(String name, Set<Genre> genres);
 }

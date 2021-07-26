@@ -29,6 +29,7 @@ public class AlbumController {
     public AlbumDto getGenres(@PathVariable Long id) {
         return mappingUtilsAlbums.mapToDto(albumService.get(id));
     }
+
     @DeleteMapping("/albums")
     public Long[] delete(@RequestParam Long[] id){
         return  albumService.delete(id);
