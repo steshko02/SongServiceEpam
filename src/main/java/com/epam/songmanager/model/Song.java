@@ -21,7 +21,7 @@ public class Song {
 
     private String notes;
 
-    @ManyToOne (optional=false)
+    @ManyToOne (optional=false, cascade = CascadeType.ALL)
     private  Album album;
 
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)

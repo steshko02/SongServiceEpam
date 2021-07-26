@@ -1,9 +1,10 @@
-package com.epam.songmanager.utils;
+package com.epam.songmanager.utils.impl;
 
 import com.epam.songmanager.model.Artist;
 import com.epam.songmanager.model.Genre;
 import com.epam.songmanager.model.dto.ArtistDto;
 import com.epam.songmanager.repository.GenreRepository;
+import com.epam.songmanager.utils.MappingUtilsArtists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

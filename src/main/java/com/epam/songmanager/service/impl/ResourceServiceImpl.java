@@ -24,8 +24,6 @@ public class ResourceServiceImpl  implements ResourceService {
     @Autowired
     private CheckSum checkSum;
     @Autowired
-    private SongService songService;
-    @Autowired
     private AudioParser audioParser;
     public Resource create( File file ) throws NoSuchAlgorithmException, IOException, TagException {
 

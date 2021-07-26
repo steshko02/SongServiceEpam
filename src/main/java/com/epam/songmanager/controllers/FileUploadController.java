@@ -1,8 +1,10 @@
 package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
+import com.epam.songmanager.model.Album;
 import com.epam.songmanager.repository.AlbumRepository;
 import com.epam.songmanager.repository.SongRepository;
+import com.epam.songmanager.service.AlbumService;
 import com.epam.songmanager.service.ResourceService;
 import com.epam.songmanager.service.SongService;
 import com.epam.songmanager.service.StorageService;
@@ -11,6 +13,7 @@ import org.farng.mp3.TagException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.core.io.Resource;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,6 +36,10 @@ public class FileUploadController {
     private ResourceService resourceService;
     @Autowired
     private SongService songService;
+    @Autowired
+    AlbumService albumService;
+    @Autowired
+    AudioParser audioParser;
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
@@ -54,14 +61,6 @@ public class FileUploadController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-
-
-    @Autowired
-    AlbumRepository albumRepository;
-
-    @Autowired
-    AudioParser audioParser;
-
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) throws IOException, NoSuchAlgorithmException, TagException {
@@ -69,16 +68,21 @@ public class FileUploadController {
 
        com.epam.songmanager.model.Resource resource = resourceService.create(localFile);
 
-       songService.addSong(songService.create(audioParser.getName(localFile),audioParser.getYear(localFile),
-               audioParser.getNotes(localFile), resource,
-               albumRepository.findByName(audioParser.getAlbum(localFile))));
-       // audioParser.getName();
-//
-//        songService.addSong(songService.create(name,1231,notes,resource,albumRepository.getById(7L)));
 
+       //redo it
+           String albumName=audioParser.getAlbum(localFile);
+           int year = audioParser.getYear(localFile);
+
+           Album album =  albumService.findByName(albumName);
+
+           if (album==null) {
+               album = new Album(year,albumName);
+           }
+           songService.addSong(songService.create(audioParser.getName(localFile),year,
+                   audioParser.getNotes(localFile), resource,album));
+       //
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
-
         return "redirect:/";
     }
 

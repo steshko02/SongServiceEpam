@@ -84,4 +84,9 @@ public class AlbumServiceImpl implements AlbumService {
         }
         return ids;
     }
+
+    @Override
+    public Album findByName(String name) {
+        return albumRepository.findByName(name);
+    }
 }

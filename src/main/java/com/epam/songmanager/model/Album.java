@@ -43,4 +43,11 @@ public class Album {
 
     public Album(){
     }
+
+
+
+    public Album(int year, String album) {
+        this.name = album;
+        this.year = year;
+    }
 }

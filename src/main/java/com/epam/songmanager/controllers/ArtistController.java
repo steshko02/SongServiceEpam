@@ -5,7 +5,7 @@ import com.epam.songmanager.model.Genre;
 import com.epam.songmanager.model.dto.ArtistDto;
 import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.service.ArtistService;
-import com.epam.songmanager.utils.MappingArtistUtilsArtistsImpl;
+import com.epam.songmanager.utils.impl.MappingArtistUtilsArtistsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

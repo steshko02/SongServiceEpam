@@ -1,6 +1,6 @@
-package com.epam.songmanager.utils;
+package com.epam.songmanager.utils.impl;
 
-
+import com.epam.songmanager.utils.AudioParser;
 import org.farng.mp3.MP3File;
 import org.farng.mp3.TagException;
 import org.farng.mp3.id3.AbstractID3v2;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Service
-public class AudioParserImpl implements AudioParser{
+public class AudioParserImpl implements AudioParser {
 
     private AbstractID3v2 getTags(File file) throws IOException, TagException {
         MP3File mp3File  = new MP3File(file);
