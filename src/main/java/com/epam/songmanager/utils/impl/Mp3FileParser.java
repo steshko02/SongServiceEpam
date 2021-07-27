@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Service
-public class AudioParserImpl implements AudioParser {
+public class Mp3FileParser implements AudioParser {
 
-    private AbstractID3v2 getTags(File file) throws IOException, TagException {
+    private static AbstractID3v2 getTags(File file) throws IOException, TagException {
         MP3File mp3File  = new MP3File(file);
         if(mp3File.hasID3v2Tag()) {
             return mp3File.getID3v2Tag();

@@ -1,65 +1,68 @@
 package com.epam.songmanager.service.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
-import java.util.stream.Stream;
-
 import com.epam.songmanager.config.StorageProperties;
 import com.epam.songmanager.exceptions.StorageException;
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
+import com.epam.songmanager.model.file_entity.FileStorageEntity;
 import com.epam.songmanager.service.ResourceService;
 import com.epam.songmanager.service.StorageService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
-public class FileSystemStorageService implements StorageService {
+public class FileSystemStorageService implements StorageService<FileStorageEntity> {
 
-    private final Path rootLocation;
+    private final Path rootLocation; //изменить на String
 
-    @Autowired
-    private ResourceService resourceService;
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-    @Override
-    public Path store(MultipartFile file) {
-        Path destinationFile;
-        try {
-            if (file.isEmpty()) {
-                throw new StorageException("Failed to store empty file.");
-            }
-             destinationFile = this.rootLocation.resolve(
-                    Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
-                    .normalize().toAbsolutePath();
+    public FileStorageEntity store(InputStream stream) {
 
-            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
-                throw new StorageException("Cannot store file outside current directory.");
-            }
-
-            try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, destinationFile,
-                        StandardCopyOption.REPLACE_EXISTING);
-            }
-        } catch (IOException e) {
-            throw new StorageException("Failed to store file.", e);
+        if (stream == null) {
+            throw new StorageException("Failed to store empty file.");
         }
+        return   createFileStorageFile(stream,createFilepath());
+    }
+
+    private String createFilepath(){
+        String destinationFile;
+        destinationFile = this.rootLocation.toString();
+        if (!destinationFile.equals(this.rootLocation.toAbsolutePath().toString())) {
+            throw new StorageException("Cannot store file outside current directory.");
+        }
+        UUID uuid = UUID.randomUUID();
+        String uuidAsString = uuid.toString();
+        destinationFile += "\\"+uuidAsString+".mp3";
         return destinationFile;
     }
+
+    private FileStorageEntity  createFileStorageFile(InputStream stream,String path){
+        File file =  new File(path);
+        try(OutputStream outputStream = new FileOutputStream(file)){
+            IOUtils.copy(stream, outputStream);
+            return new FileStorageEntity(stream,path,file.getTotalSpace());
+        } catch (FileNotFoundException e) {
+            throw new StorageException("Failed to find files", e);
+        } catch (IOException e) {
+            throw new StorageException("Failed to stored files", e);
+        }
+    }
+
     @Override
     public Stream<Path> loadAll() {
         try {
@@ -110,4 +113,8 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageException("Could not initialize storage", e);
         }
     }
+
+
+
+
 }

@@ -2,16 +2,14 @@ package com.epam.songmanager.service.impl;
 
 import com.epam.songmanager.model.Resource;
 import com.epam.songmanager.repository.ResourceRepository;
-import com.epam.songmanager.service.CheckSum;
+import com.epam.songmanager.utils.CheckSum;
 import com.epam.songmanager.service.ResourceService;
-import com.epam.songmanager.service.SongService;
-import com.epam.songmanager.utils.AudioParser;
 import org.farng.mp3.TagException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -23,19 +21,16 @@ public class ResourceServiceImpl  implements ResourceService {
     private ResourceRepository resourceRepository;
     @Autowired
     private CheckSum checkSum;
-    @Autowired
-    private AudioParser audioParser;
-    public Resource create( File file ) throws NoSuchAlgorithmException, IOException, TagException {
 
-        audioParser.getName(file);
+    public Resource create(InputStream inputStream,String path,long size) throws NoSuchAlgorithmException, IOException, TagException {
 
         Resource resource = null;
-        if(file.exists() && !file.isDirectory() ) {
+        if(inputStream!=null ) {
             resource = new Resource();
-            resource.setSize(file.length());
-            var messageDigest = MessageDigest.getInstance("SHA-512");
-            resource.setChecksum(checkSum.calculate(file.getPath(), messageDigest));
-            resource.setPath(file.getPath());
+            resource.setSize(size);
+            var messageDigest = MessageDigest.getInstance("SHA-512"); //вынест в конфиг
+            resource.setChecksum(checkSum.calculate(inputStream, messageDigest));
+            resource.setPath(path);
         }
         return resource;
     }
@@ -56,8 +51,6 @@ public class ResourceServiceImpl  implements ResourceService {
     public List<Resource> getAll() {
         return resourceRepository.findAll();
     }
-
-
 
     @Override
     public void deleteAll() {

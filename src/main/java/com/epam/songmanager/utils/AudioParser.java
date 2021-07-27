@@ -7,9 +7,9 @@ import java.io.IOException;
 
 public interface AudioParser {
 
-    String getName(File multipartFile) throws IOException,  TagException;
-    String getAlbum(File multipartFile)throws IOException,  TagException;
-    int getYear(File multipartFile)throws IOException,  TagException;
-    String getNotes(File multipartFile) throws IOException,  TagException;
+    String getName(File file) throws IOException,  TagException;
+    String getAlbum(File file)throws IOException,  TagException;
+    int getYear(File file)throws IOException,  TagException;
+    String getNotes(File file) throws IOException,  TagException;
 
 }

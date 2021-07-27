@@ -1,11 +1,12 @@
-package com.epam.songmanager.service.impl;
+package com.epam.songmanager.utils.impl;
 
-import com.epam.songmanager.service.CheckSum;
+import com.epam.songmanager.utils.CheckSum;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 
@@ -15,6 +16,23 @@ public class CheckSumImpl implements CheckSum {
     public String calculate(String filename, MessageDigest md) throws IOException {
         try (
                 var fis = new FileInputStream(filename);
+                var bis = new BufferedInputStream(fis);
+                var dis = new DigestInputStream(bis, md)
+        ) {
+            while (dis.read() != -1) ;
+            md = dis.getMessageDigest();
+        }
+        var result = new StringBuilder();
+        for (byte b : md.digest()) {
+            result.append(String.format("%02x", b));
+        }
+        return result.toString();
+    }
+
+    @Override
+    public String calculate(InputStream stream, MessageDigest md) throws IOException {
+        try (
+                var fis = stream;
                 var bis = new BufferedInputStream(fis);
                 var dis = new DigestInputStream(bis, md)
         ) {

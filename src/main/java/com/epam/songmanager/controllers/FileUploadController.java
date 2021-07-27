@@ -1,7 +1,9 @@
 package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
+import com.epam.songmanager.facades.ObjInitializer;
 import com.epam.songmanager.model.Album;
+import com.epam.songmanager.model.file_entity.FileStorageEntity;
 import com.epam.songmanager.repository.AlbumRepository;
 import com.epam.songmanager.repository.SongRepository;
 import com.epam.songmanager.service.AlbumService;
@@ -25,25 +27,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 
 @Controller
 public class FileUploadController {
+
     @Autowired
-    private  StorageService storageService;
+    private  StorageService <FileStorageEntity> storageService;
+
     @Autowired
     private ResourceService resourceService;
+
     @Autowired
-    private SongService songService;
-    @Autowired
-    AlbumService albumService;
-    @Autowired
-    AudioParser audioParser;
+    private ObjInitializer<FileStorageEntity> objInitializer;
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
-
         model.addAttribute("files", storageService.loadAll().map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path.getFileName().toString()).build().toUri().toString())
@@ -61,26 +62,13 @@ public class FileUploadController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/")
+     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) throws IOException, NoSuchAlgorithmException, TagException {
-        File localFile = new File(storageService.store(file).toString());
+                                   RedirectAttributes redirectAttributes)  throws IOException, NoSuchAlgorithmException,
+            TagException {
 
-       com.epam.songmanager.model.Resource resource = resourceService.create(localFile);
+         objInitializer.init(storageService.store(file.getInputStream()));
 
-
-       //redo it
-           String albumName=audioParser.getAlbum(localFile);
-           int year = audioParser.getYear(localFile);
-
-           Album album =  albumService.findByName(albumName);
-
-           if (album==null) {
-               album = new Album(year,albumName);
-           }
-           songService.addSong(songService.create(audioParser.getName(localFile),year,
-                   audioParser.getNotes(localFile), resource,album));
-       //
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
         return "redirect:/";

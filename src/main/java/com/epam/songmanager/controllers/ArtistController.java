@@ -44,7 +44,7 @@ public class ArtistController {
 
     @GetMapping("/artists")
     public Set<ArtistDto> getByFilters(@RequestParam String name, @RequestParam Long[] genres) {
-
+//fix
         Set<ArtistDto> artistDtoSet = new HashSet<>();
         Set<Genre> forFilter = new HashSet<>();
         Arrays.stream(genres).forEach(id->forFilter.add(genreRepository.getById(id)));
