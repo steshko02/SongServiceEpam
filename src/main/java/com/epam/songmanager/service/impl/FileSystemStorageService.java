@@ -6,6 +6,7 @@ import com.epam.songmanager.exceptions.StorageFileNotFoundException;
 import com.epam.songmanager.model.file_entity.FileStorageEntity;
 import com.epam.songmanager.service.ResourceService;
 import com.epam.songmanager.service.StorageService;
+import com.epam.songmanager.utils.InpStreamClone;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -27,11 +28,14 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
     private final Path rootLocation; //изменить на String
 
     @Autowired
+    private InpStreamClone streamClone;
+
+    @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-    public FileStorageEntity store(InputStream stream) {
+    public FileStorageEntity store(InputStream stream) throws IOException {
 
         if (stream == null) {
             throw new StorageException("Failed to store empty file.");
@@ -51,11 +55,17 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
         return destinationFile;
     }
 
-    private FileStorageEntity  createFileStorageFile(InputStream stream,String path){
-        File file =  new File(path);
+    private FileStorageEntity  createFileStorageFile(InputStream stream,String path) throws IOException {
+          File file =  new File(path);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        stream.transferTo(baos);
+        InputStream firstClone = new ByteArrayInputStream(baos.toByteArray());//
+        InputStream secClone = new ByteArrayInputStream(baos.toByteArray());//
+
         try(OutputStream outputStream = new FileOutputStream(file)){
-            IOUtils.copy(stream, outputStream);
-            return new FileStorageEntity(stream,path,file.getTotalSpace());
+            IOUtils.copy(firstClone, outputStream);
+            return new FileStorageEntity(secClone,path,file.length());
         } catch (FileNotFoundException e) {
             throw new StorageException("Failed to find files", e);
         } catch (IOException e) {

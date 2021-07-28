@@ -6,5 +6,5 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 public interface ObjInitializer<T> {
-     void init(T entity) throws NoSuchAlgorithmException, TagException, IOException;
+     void init(T entity) throws Exception;
 }

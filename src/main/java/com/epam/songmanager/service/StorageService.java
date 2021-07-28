@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -14,7 +15,7 @@ public interface StorageService <T extends BaseFile> {
 
     void init();
 
-    T store(InputStream entity);
+    T store(InputStream entity) throws IOException;
 
     Stream<Path> loadAll();
 

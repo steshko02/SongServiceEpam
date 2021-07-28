@@ -25,9 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 
@@ -36,9 +34,6 @@ public class FileUploadController {
 
     @Autowired
     private  StorageService <FileStorageEntity> storageService;
-
-    @Autowired
-    private ResourceService resourceService;
 
     @Autowired
     private ObjInitializer<FileStorageEntity> objInitializer;
@@ -64,8 +59,8 @@ public class FileUploadController {
 
      @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes)  throws IOException, NoSuchAlgorithmException,
-            TagException {
+                                   RedirectAttributes redirectAttributes) throws Exception {
+
 
          objInitializer.init(storageService.store(file.getInputStream()));
 

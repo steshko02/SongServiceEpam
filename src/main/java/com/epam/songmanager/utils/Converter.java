@@ -6,4 +6,5 @@ import java.io.IOException;
 public interface Converter <T> {
 
     File converting (T entity) throws IOException;
+    boolean delete (T entity) throws IOException;
 }
