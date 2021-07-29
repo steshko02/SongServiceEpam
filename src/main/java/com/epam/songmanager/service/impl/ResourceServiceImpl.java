@@ -36,10 +36,12 @@ public class ResourceServiceImpl  implements ResourceService {
     }
 
     @Override
-    public void addResource(Resource resource) {
+    public Long addResource(Resource resource) {
         if(!resourceRepository.existsByPath(resource.getPath())) {
             resourceRepository.save(resource);
+            return resource.getId();
         }
+        return null;
     }
 
     @Override

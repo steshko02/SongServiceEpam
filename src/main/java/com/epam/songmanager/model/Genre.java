@@ -27,6 +27,8 @@ public class Genre {
     @ManyToMany(mappedBy = "genres")
     private Set<Album> albums = new HashSet<>();
 
-
-
+    public Genre(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

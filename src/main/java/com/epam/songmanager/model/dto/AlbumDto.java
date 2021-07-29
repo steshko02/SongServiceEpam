@@ -21,4 +21,11 @@ public class AlbumDto {
 
     public AlbumDto() {
     }
+
+    public AlbumDto(Long id, String name, int year, String notes) {
+        this.id = id;
+        this.name = name;
+        this.year = year;
+        this.notes = notes;
+    }
 }

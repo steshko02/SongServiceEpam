@@ -30,4 +30,10 @@ public class Artist {
 
     public Artist() {
     }
+
+    public Artist(Long id, String name, String notes) {
+        this.id = id;
+        this.name = name;
+        this.notes = notes;
+    }
 }

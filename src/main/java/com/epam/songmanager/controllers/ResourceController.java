@@ -13,17 +13,15 @@ public class ResourceController {
     @Autowired
     private ResourceService resourceService;
 
-    @GetMapping("/resource")
-    public String  getAll(Model model) {
+//    @GetMapping("/resource")
+//    public String  getAll(Model model) {
+//
+//        model.addAttribute("resources", resourceService.getAll());
+//        return "resources";
+//    }
 
-        model.addAttribute("resources", resourceService.getAll());
-        return "resources";
-    }
-
-    @PostMapping("/resource")
-    public String  getAll(@RequestParam Long id) {
-
-
-        return "resources";
-    }
+//    @PostMapping("/resource")
+//    public String  add() {
+//        return "resources";
+//    }
 }

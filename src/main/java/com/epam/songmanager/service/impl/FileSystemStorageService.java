@@ -4,9 +4,7 @@ import com.epam.songmanager.config.StorageProperties;
 import com.epam.songmanager.exceptions.StorageException;
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
 import com.epam.songmanager.model.file_entity.FileStorageEntity;
-import com.epam.songmanager.service.ResourceService;
 import com.epam.songmanager.service.StorageService;
-import com.epam.songmanager.utils.InpStreamClone;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -27,8 +25,6 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
 
     private final Path rootLocation; //изменить на String
 
-    @Autowired
-    private InpStreamClone streamClone;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -124,7 +120,8 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
         }
     }
 
-
-
+    public FileSystemStorageService(Path rootLocation) {
+        this.rootLocation = rootLocation;
+    }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@EnableConfigurationProperties(StorageProperties.class)
+//@EnableConfigurationProperties(StorageProperties.class)
 public class SongManagerApplication {
 
 	public static void main(String[] args) {
@@ -18,11 +18,11 @@ public class SongManagerApplication {
 	}
 
 
-	@Bean
-	CommandLineRunner init(StorageService storageService,ResourceService resourceService) {
-		return (args) -> {
-			//storageService.init();
-		};
-	}
+//	@Bean
+//	CommandLineRunner init(StorageService storageService,ResourceService resourceService) {
+//		return (args) -> {
+//			//storageService.init();
+//		};
+//	}
 
 }

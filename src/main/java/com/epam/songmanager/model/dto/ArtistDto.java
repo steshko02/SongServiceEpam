@@ -18,4 +18,10 @@ public class ArtistDto {
 
     public ArtistDto() {
     }
+
+    public ArtistDto(Long id, String name, String notes) {
+        this.id = id;
+        this.name = name;
+        this.notes = notes;
+    }
 }
