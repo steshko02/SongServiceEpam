@@ -36,7 +36,7 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
         if (stream == null) {
             throw new StorageException("Failed to store empty file.");
         }
-        return   createFileStorageFile(stream,createFilepath());
+        return createFileStorageFile(stream,createFilepath());
     }
 
     private String createFilepath(){
@@ -54,10 +54,11 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
     private FileStorageEntity  createFileStorageFile(InputStream stream,String path) throws IOException {
           File file =  new File(path);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        stream.transferTo(baos);
-        InputStream firstClone = new ByteArrayInputStream(baos.toByteArray());//
-        InputStream secClone = new ByteArrayInputStream(baos.toByteArray());//
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        stream.transferTo(baos);
+//        InputStream firstClone = new ByteArrayInputStream(baos.toByteArray());//
+//        InputStream secClone = new ByteArrayInputStream(baos.toByteArray());//
+
 
         try(OutputStream outputStream = new FileOutputStream(file)){
             IOUtils.copy(firstClone, outputStream);

@@ -1,9 +1,8 @@
 package com.epam.songmanager.service;
 
-import com.epam.songmanager.model.Artist;
-import com.epam.songmanager.model.Genre;
+import com.epam.songmanager.model.entity.Artist;
+import com.epam.songmanager.model.entity.Genre;
 
-import java.util.List;
 import java.util.Set;
 
 public interface ArtistService {

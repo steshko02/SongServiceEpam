@@ -1,6 +1,6 @@
 package com.epam.songmanager.utils;
 
-import com.epam.songmanager.model.Artist;
+import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.model.dto.ArtistDto;
 
 public interface MappingUtilsArtists {

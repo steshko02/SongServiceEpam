@@ -13,22 +13,6 @@ import java.security.MessageDigest;
 @Component
 public class CheckSumImpl implements CheckSum {
 
-    public String calculate(String filename, MessageDigest md) throws IOException {
-        try (
-                var fis = new FileInputStream(filename);
-                var bis = new BufferedInputStream(fis);
-                var dis = new DigestInputStream(bis, md)
-        ) {
-            while (dis.read() != -1) ;
-            md = dis.getMessageDigest();
-        }
-        var result = new StringBuilder();
-        for (byte b : md.digest()) {
-            result.append(String.format("%02x", b));
-        }
-        return result.toString();
-    }
-
     @Override
     public String calculate(InputStream stream, MessageDigest md) throws IOException {
         try (
@@ -44,5 +28,10 @@ public class CheckSumImpl implements CheckSum {
             result.append(String.format("%02x", b));
         }
         return result.toString();
+    }
+
+    @Override
+    public boolean check(String storageFile, String resourceFile) throws IOException {
+        return storageFile.equals(resourceFile);
     }
 }

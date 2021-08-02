@@ -1,16 +1,14 @@
 package com.epam.songmanager.service.impl;
 
-import com.epam.songmanager.model.Artist;
-import com.epam.songmanager.model.Genre;
+import com.epam.songmanager.model.entity.Artist;
+import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.repository.ArtistRepository;
 import com.epam.songmanager.repository.GenreRepository;
-import com.epam.songmanager.repository.SongRepository;
 import com.epam.songmanager.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service

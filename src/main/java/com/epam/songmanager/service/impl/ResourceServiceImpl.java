@@ -1,6 +1,6 @@
 package com.epam.songmanager.service.impl;
 
-import com.epam.songmanager.model.Resource;
+import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.repository.ResourceRepository;
 import com.epam.songmanager.utils.CheckSum;
 import com.epam.songmanager.service.ResourceService;
@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.MessageDigest;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -22,17 +21,17 @@ public class ResourceServiceImpl  implements ResourceService {
     @Autowired
     private CheckSum checkSum;
 
-    public Resource create(InputStream inputStream,String path,long size) throws NoSuchAlgorithmException, IOException, TagException {
+    public Resource create(String sum,String path,long size) throws NoSuchAlgorithmException, IOException, TagException {
 
-        Resource resource = null;
-        if(inputStream!=null ) {
-            resource = new Resource();
-            resource.setSize(size);
-            var messageDigest = MessageDigest.getInstance("SHA-512"); //вынест в конфиг
-            resource.setChecksum(checkSum.calculate(inputStream, messageDigest));
-            resource.setPath(path);
-        }
-        return resource;
+//        Resource resource = null;
+//        if(inputStream!=null ) {
+//            resource = new Resource();
+//            resource.setSize(size);
+//            var messageDigest = MessageDigest.getInstance("SHA-512"); //вынест в конфиг
+//            resource.setChecksum(checkSum.calculate(inputStream, messageDigest));
+//            resource.setPath(path);
+//        }
+        return new Resource(sum,path,size);
     }
 
     @Override
@@ -59,6 +58,10 @@ public class ResourceServiceImpl  implements ResourceService {
         resourceRepository.deleteAll();
     }
 
+    @Override
+    public boolean ifExistsByCheckSum(String str) {
+        return resourceRepository.existsByChecksum(str);
+    }
 
 
 }

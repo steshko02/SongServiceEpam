@@ -1,8 +1,8 @@
 package com.epam.songmanager.service.impl;
 
-import com.epam.songmanager.model.Album;
-import com.epam.songmanager.model.Artist;
-import com.epam.songmanager.model.Genre;
+import com.epam.songmanager.model.entity.Album;
+import com.epam.songmanager.model.entity.Artist;
+import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.repository.AlbumRepository;
 import com.epam.songmanager.repository.ArtistRepository;
 import com.epam.songmanager.repository.GenreRepository;

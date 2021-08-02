@@ -1,4 +1,4 @@
-package com.epam.songmanager.model;
+package com.epam.songmanager.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +23,6 @@ public class Resource {
 
     private  String checksum;
 
-    public  Resource(){
+    public  Resource(String sum, String path, long size){
     }
 }

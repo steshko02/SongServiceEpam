@@ -1,7 +1,7 @@
 package com.epam.songmanager.controllers;
 
-import com.epam.songmanager.model.Artist;
-import com.epam.songmanager.model.Genre;
+import com.epam.songmanager.model.entity.Artist;
+import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.model.dto.ArtistDto;
 import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.service.ArtistService;
@@ -43,7 +43,7 @@ public class ArtistController {
 
     @GetMapping("/artists")
     public Set<ArtistDto> getByFilters(@RequestParam String name, @RequestParam Long[] genres) {
-//fix
+
         Set<ArtistDto> artistDtoSet = new HashSet<>();
         Set<Genre> forFilter = new HashSet<>();
         Arrays.stream(genres).forEach(id->forFilter.add(genreRepository.getById(id)));

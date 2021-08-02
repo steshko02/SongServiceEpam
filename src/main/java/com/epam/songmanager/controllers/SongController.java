@@ -1,6 +1,6 @@
 package com.epam.songmanager.controllers;
 
-import com.epam.songmanager.model.Song;
+import com.epam.songmanager.model.entity.Song;
 import com.epam.songmanager.repository.ResourceRepository;
 import com.epam.songmanager.repository.SongRepository;
 import com.epam.songmanager.service.SongService;

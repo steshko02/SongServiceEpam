@@ -7,16 +7,21 @@ import com.epam.songmanager.utils.Converter;
 import com.epam.songmanager.utils.InpStreamClone;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 
 
-@Service
+@Component
 public class ConverterToTempMp3File<T extends BaseFile>  implements Converter<T> {
 
-    @Autowired
-    private InpStreamClone streamClone;
+    File tmpFile = File.createTempFile("data", ".mp3");
+    OutputStream outputStream = new FileOutputStream(tmpFile);
+
+
+    public ConverterToTempMp3File() throws IOException {
+    }
 
     @Override
     public File converting(T entity) throws IOException {
@@ -38,5 +43,10 @@ public class ConverterToTempMp3File<T extends BaseFile>  implements Converter<T>
     public boolean delete(T entity) throws IOException {
         File tmpFile = new File(entity.getPath());
        return tmpFile.delete();
+    }
+
+    @Override
+    public void write(int b) throws IOException {
+        outputStream.write(b);
     }
 }

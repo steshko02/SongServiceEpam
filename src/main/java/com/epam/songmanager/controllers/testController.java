@@ -1,23 +1,13 @@
 package com.epam.songmanager.controllers;
 
-import com.epam.songmanager.model.Album;
-import com.epam.songmanager.model.Resource;
-import com.epam.songmanager.model.Song;
 import com.epam.songmanager.repository.AlbumRepository;
 import com.epam.songmanager.repository.SongRepository;
 import com.epam.songmanager.service.ResourceService;
 import com.epam.songmanager.service.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 

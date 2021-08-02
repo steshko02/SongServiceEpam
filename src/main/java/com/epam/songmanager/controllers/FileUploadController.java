@@ -2,20 +2,11 @@ package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
 import com.epam.songmanager.facades.ObjInitializer;
-import com.epam.songmanager.model.Album;
 import com.epam.songmanager.model.file_entity.FileStorageEntity;
-import com.epam.songmanager.repository.AlbumRepository;
-import com.epam.songmanager.repository.SongRepository;
-import com.epam.songmanager.service.AlbumService;
-import com.epam.songmanager.service.ResourceService;
-import com.epam.songmanager.service.SongService;
 import com.epam.songmanager.service.StorageService;
-import com.epam.songmanager.utils.AudioParser;
-import org.farng.mp3.TagException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.core.io.Resource;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,7 +17,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.*;
-import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -60,7 +50,6 @@ public class FileUploadController {
      @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) throws Exception {
-
 
          objInitializer.init(storageService.store(file.getInputStream()));
 

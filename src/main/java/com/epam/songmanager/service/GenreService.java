@@ -1,6 +1,6 @@
 package com.epam.songmanager.service;
 
-import com.epam.songmanager.model.Genre;
+import com.epam.songmanager.model.entity.Genre;
 
 import java.util.List;
 

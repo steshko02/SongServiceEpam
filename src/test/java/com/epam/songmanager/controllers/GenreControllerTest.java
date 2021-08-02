@@ -1,9 +1,7 @@
 package com.epam.songmanager.controllers;
 
-import com.epam.songmanager.model.Album;
-import com.epam.songmanager.model.Genre;
+import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.service.GenreService;
-import com.epam.songmanager.service.StorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,13 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(GenreController.class)
 class GenreControllerTest {

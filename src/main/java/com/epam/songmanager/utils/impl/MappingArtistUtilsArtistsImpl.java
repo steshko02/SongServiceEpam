@@ -1,7 +1,7 @@
 package com.epam.songmanager.utils.impl;
 
-import com.epam.songmanager.model.Artist;
-import com.epam.songmanager.model.Genre;
+import com.epam.songmanager.model.entity.Artist;
+import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.model.dto.ArtistDto;
 import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.utils.MappingUtilsArtists;

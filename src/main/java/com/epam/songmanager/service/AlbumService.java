@@ -1,7 +1,6 @@
 package com.epam.songmanager.service;
 
-import com.epam.songmanager.model.Album;
-import com.epam.songmanager.model.Artist;
+import com.epam.songmanager.model.entity.Album;
 
 public interface AlbumService {
 

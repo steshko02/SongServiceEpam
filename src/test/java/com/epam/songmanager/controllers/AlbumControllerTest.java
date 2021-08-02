@@ -1,10 +1,7 @@
 package com.epam.songmanager.controllers;
 
-import com.epam.songmanager.model.Album;
-import com.epam.songmanager.model.Artist;
-import com.epam.songmanager.model.Genre;
+import com.epam.songmanager.model.entity.Album;
 import com.epam.songmanager.model.dto.AlbumDto;
-import com.epam.songmanager.repository.AlbumRepository;
 import com.epam.songmanager.service.AlbumService;
 import com.epam.songmanager.utils.MappingUtilsAlbums;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,18 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AlbumController.class)
 public class AlbumControllerTest {

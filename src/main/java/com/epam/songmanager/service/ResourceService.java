@@ -1,9 +1,8 @@
 package com.epam.songmanager.service;
 
-import com.epam.songmanager.model.Resource;
+import com.epam.songmanager.model.entity.Resource;
 import org.farng.mp3.TagException;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
@@ -13,6 +12,7 @@ public interface ResourceService  {
     Long  addResource(Resource resource);
     Resource get(Long id);
     List<Resource> getAll();
-    Resource  create(InputStream stream,String path,long size) throws NoSuchAlgorithmException, IOException, TagException;
+    Resource  create(String checkSum,String path,long size) throws NoSuchAlgorithmException, IOException, TagException;
     void deleteAll();
+    boolean  ifExistsByCheckSum(String str);
 }

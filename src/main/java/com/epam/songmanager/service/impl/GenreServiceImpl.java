@@ -1,6 +1,6 @@
 package com.epam.songmanager.service.impl;
 
-import com.epam.songmanager.model.Genre;
+import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;

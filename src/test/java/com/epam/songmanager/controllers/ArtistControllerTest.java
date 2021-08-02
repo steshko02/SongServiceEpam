@@ -1,11 +1,7 @@
 package com.epam.songmanager.controllers;
 
-import com.epam.songmanager.model.Album;
-import com.epam.songmanager.model.Artist;
-import com.epam.songmanager.model.Genre;
-import com.epam.songmanager.model.dto.AlbumDto;
+import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.model.dto.ArtistDto;
-import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.service.ArtistService;
 import com.epam.songmanager.utils.impl.MappingArtistUtilsArtistsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,9 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
