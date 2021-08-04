@@ -2,7 +2,8 @@ package com.epam.songmanager.facades;
 
 import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.model.entity.Song;
-import com.epam.songmanager.model.file_entity.BaseFile;
+import com.epam.songmanager.model.file_entity.FileStorageEntity;
+import com.epam.songmanager.model.file_entity.ResourceDecorator;
 import com.epam.songmanager.service.AlbumService;
 import com.epam.songmanager.service.ResourceService;
 import com.epam.songmanager.service.SongService;
@@ -10,24 +11,39 @@ import com.epam.songmanager.service.StorageService;
 import com.epam.songmanager.utils.AudioParser;
 import com.epam.songmanager.utils.CheckSum;
 import com.epam.songmanager.utils.Converter;
+import org.apache.commons.io.input.CountingInputStream;
+import org.apache.commons.io.input.TeeInputStream;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.farng.mp3.TagException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @Service
-public class ObjectUnderUploadsToFileStorageMaker <T extends BaseFile> implements ObjInitializer<T> {
+public class ObjectUnderUploadsToFileStorageMaker <T extends ResourceDecorator> implements ObjInitializer<T> {
+
+
+    @Value("${MessageDigest}")
+    private  String messageDigest;
+
+    @Value("${FileExtension}")
+    private  String fileExtension;
 
     @Autowired
     private ResourceService resourceService;
+
     @Autowired
-    private StorageService<T> storageService;
+    StorageService<T> storageService;
+
     @Autowired
     private AudioParser mp3Parser;
-    @Autowired
-    private Converter<T> converterToTempFile;
 
     @Autowired
     private AlbumService albumService;
@@ -36,54 +52,60 @@ public class ObjectUnderUploadsToFileStorageMaker <T extends BaseFile> implement
     private SongService songService;
 
     @Autowired
-    private CheckSum checkSum;
+    private CheckSum checkSum ;
 
-    private  void  storeInpStream(InputStream inputStream ) throws IOException {
-        storageService.store(inputStream);
-    }
 
-    private void initSong(T entity,Resource resource) throws Exception {
+    private void initSong(Resource resource,File tmp) throws Exception {
 
-        File file = null;
         try {
             Song song = new Song();
-            file = converterToTempFile.converting(entity);
-            mp3Parser.create(file);
+            mp3Parser.create(tmp);
             song.setName(mp3Parser.getName());
             song.setAlbum(albumService.findByName(mp3Parser.getAlbum()));
             song.setNotes(mp3Parser.getNotes());
             song.setYear(mp3Parser.getYear());
 
-            file.delete();
             song.setResource(resource);
             songService.addSong(song);
         }
         catch (IOException | TagException e){
             throw new Exception("Error: " + e);
         }
-        finally {
-            file.delete();
-        }
     }
 
-    public void init(T entity) throws Exception {
-
-        String sum  = checkSum.calculate(entity.getInputStream(), MessageDigest.getInstance("SHA-512"));
-
-        entity.setInputStream(entity.getInputStreamClone());
-
-        if(resourceService.ifExistsByCheckSum(sum)){
-            return;
-        }
-
+    private void initResource(T entity, File file) throws Exception {
 
         Resource resource =  resourceService.
-                create(checkSum.calculate(entity.getInputStream(),
-                        MessageDigest.getInstance("SHA-512")),entity.getPath(),entity.getSize());
-
-        initSong(entity,resource);
+                create(entity.getCheckSum(),entity.getPath(), entity.getSize());
+        initSong(resource,file);
         resourceService.addResource(resource);
     }
 
+    @Override
+    public void  createFiles(InputStream stream) throws NoSuchAlgorithmException, IOException {
 
+        File tmpFile = File.createTempFile("data", fileExtension);
+        MessageDigest md = MessageDigest.getInstance(messageDigest);
+
+        try (CountingInputStream is =new CountingInputStream(new DigestInputStream(
+                new TeeInputStream(stream, new FileOutputStream(tmpFile)),md))){
+
+            String path = storageService.store(is);
+            String checkSumRes = checkSum.create(md);
+            if(!resourceService.ifExistsByCheckSum(checkSumRes)){
+                    initResource(storageService.create(checkSumRes,path,
+                            is.getByteCount()),tmpFile);
+            }else {
+                is.close();
+                Files.delete(Path.of(path));
+            }
+           tmpFile.delete();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            tmpFile.delete();
+        }
+    }
 }

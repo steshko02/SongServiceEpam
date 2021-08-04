@@ -30,8 +30,19 @@ public class CheckSumImpl implements CheckSum {
         return result.toString();
     }
 
+
+
     @Override
     public boolean check(String storageFile, String resourceFile) throws IOException {
         return storageFile.equals(resourceFile);
+    }
+
+    @Override
+    public String create(MessageDigest md) {
+        StringBuilder res = new StringBuilder();
+        for (byte b : md.digest()) {
+            res.append(String.format("%02x", b));
+        }
+        return  res.toString();
     }
 }

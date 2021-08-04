@@ -49,6 +49,12 @@ public class Album {
         this.notes = notes;
     }
 
+    public Album(String name, int year, String notes) {
+        this.name = name;
+        this.year = year;
+        this.notes = notes;
+    }
+
     public Album(int year, String album) {
         this.name = album;
         this.year = year;

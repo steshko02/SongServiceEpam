@@ -18,20 +18,10 @@ public class ResourceServiceImpl  implements ResourceService {
 
     @Autowired
     private ResourceRepository resourceRepository;
-    @Autowired
-    private CheckSum checkSum;
+
 
     public Resource create(String sum,String path,long size) throws NoSuchAlgorithmException, IOException, TagException {
-
-//        Resource resource = null;
-//        if(inputStream!=null ) {
-//            resource = new Resource();
-//            resource.setSize(size);
-//            var messageDigest = MessageDigest.getInstance("SHA-512"); //вынест в конфиг
-//            resource.setChecksum(checkSum.calculate(inputStream, messageDigest));
-//            resource.setPath(path);
-//        }
-        return new Resource(sum,path,size);
+        return new Resource(path,size,sum);
     }
 
     @Override

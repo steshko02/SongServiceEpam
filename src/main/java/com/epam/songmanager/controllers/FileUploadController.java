@@ -5,7 +5,6 @@ import com.epam.songmanager.facades.ObjInitializer;
 import com.epam.songmanager.model.file_entity.FileStorageEntity;
 import com.epam.songmanager.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -26,8 +25,7 @@ public class FileUploadController {
     private  StorageService <FileStorageEntity> storageService;
 
     @Autowired
-    private ObjInitializer<FileStorageEntity> objInitializer;
-
+    private  ObjInitializer <FileStorageEntity> objInitializer;
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
         model.addAttribute("files", storageService.loadAll().map(
@@ -51,7 +49,7 @@ public class FileUploadController {
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) throws Exception {
 
-         objInitializer.init(storageService.store(file.getInputStream()));
+      objInitializer.createFiles(file.getInputStream());
 
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");

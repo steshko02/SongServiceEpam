@@ -1,30 +1,29 @@
 package com.epam.songmanager.model.file_entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.commons.io.input.TeeInputStream;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-@EqualsAndHashCode(callSuper = true)
-@Setter
-@Getter
-
-public class FileStorageEntity extends ResourceDecorator {
+public class TmpFileEntity extends ResourceDecorator{
 
 
-    public FileStorageEntity(String checkSumRes, String path, long length) {
-        super(checkSumRes,path,length);
+
+    private final File tmpFile = File.createTempFile("data",".mp3");
+
+    public TmpFileEntity() throws IOException {
     }
 
     @Override
     public void save(InputStream is) throws IOException, NoSuchAlgorithmException {
-        try (InputStream  targetInputStream = new DigestInputStream(is,MessageDigest.getInstance("SHA-512"))) {
-                super.save(targetInputStream);
+        try (InputStream  targetInputStream = new TeeInputStream(is,new FileOutputStream(tmpFile))) {
+            super.save(targetInputStream);
         } catch (IOException e) {
             throw new IOException("Exception occurred while encrypting or stream resource handling. ", e);
         } catch (NoSuchAlgorithmException e) {

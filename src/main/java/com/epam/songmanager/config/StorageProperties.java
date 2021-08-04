@@ -1,10 +1,12 @@
 package com.epam.songmanager.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("storage")
 public class StorageProperties {
-    private String location = "C:\\Users\\stesh\\OneDrive\\Рабочий стол\\songs";
+    @Value ("${FileStorageLocation}")
+    private String location ;
 
     public String getLocation() {
         return location;
