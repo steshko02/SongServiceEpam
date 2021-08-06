@@ -1,6 +1,7 @@
 package com.epam.songmanager.model.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,5 +34,12 @@ public class Artist {
         this.id = id;
         this.name = name;
         this.notes = notes;
+    }
+
+    public Artist(Long id, String name, String notes, Set<Genre> genres) {
+        this.id = id;
+        this.name = name;
+        this.notes = notes;
+        this.genres = genres;
     }
 }

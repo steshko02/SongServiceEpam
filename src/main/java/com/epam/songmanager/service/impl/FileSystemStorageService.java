@@ -10,6 +10,7 @@ import com.epam.songmanager.service.StorageService;
 import com.epam.songmanager.utils.CheckSum;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,8 @@ import java.util.stream.Stream;
 @Service
 public class FileSystemStorageService implements StorageService<FileStorageEntity> {
 
-    private final Path rootLocation; //изменить на String
+
+    private final Path rootLocation;  //изменить на String
 
    @Autowired
    private CheckSum checkSum ;
@@ -35,17 +37,18 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
     @Autowired
     private ResourceService resourceService;
 
-    @Autowired
-    private ObjInitializer<FileStorageEntity> objInitializer;
-
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-    public String store(InputStream stream) throws IOException, NoSuchAlgorithmException {
 
+    public FileSystemStorageService(String s) {
+        this.rootLocation = Paths.get(s);
+    }
+
+    public String store(InputStream stream) throws IOException, NoSuchAlgorithmException {
         if (stream == null) {
             throw new StorageException("Failed to store empty file.");
         }
@@ -128,10 +131,6 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
         }
-    }
-
-    public FileSystemStorageService(Path rootLocation) {
-        this.rootLocation = rootLocation;
     }
 
 }

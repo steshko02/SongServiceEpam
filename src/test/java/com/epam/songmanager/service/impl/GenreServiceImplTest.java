@@ -1,8 +1,6 @@
 package com.epam.songmanager.service.impl;
 
-import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.model.entity.Genre;
-import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.service.GenreService;
 import org.junit.jupiter.api.Test;
@@ -56,7 +54,7 @@ class GenreServiceImplTest {
     void getAll() {
         List<Genre> genres = new ArrayList<>();
         genres.add(new Genre(1L,"genre1"));
-        genres.add(new Genre(1L,"genre2"));
+        genres.add(new Genre(2L,"genre2"));
         Mockito.when(genreRepository.findAll()).thenReturn(genres);
         assertEquals(genres,genreService.getAll());
         Mockito.verify(genreRepository,Mockito.times(1)).findAll();

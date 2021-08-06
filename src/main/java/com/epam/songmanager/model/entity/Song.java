@@ -6,9 +6,9 @@ import javax.persistence.*;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @Entity
 @Table(name="songs")
+@EqualsAndHashCode
 public class Song {
 
     @Id
@@ -32,6 +32,15 @@ public class Song {
     }
 
     public Song(String name, int year, String notes, Album album, Resource resource) {
+        this.name = name;
+        this.year = year;
+        this.notes = notes;
+        this.album = album;
+        this.resource = resource;
+    }
+
+    public Song(Long id, String name, int year, String notes, Album album, Resource resource) {
+        this.id = id;
         this.name = name;
         this.year = year;
         this.notes = notes;

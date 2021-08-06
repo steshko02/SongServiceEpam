@@ -1,6 +1,7 @@
 package com.epam.songmanager.model.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode
 public class Resource {
 
     @Id

@@ -24,4 +24,11 @@ public class ArtistDto {
         this.name = name;
         this.notes = notes;
     }
+
+    public ArtistDto(Long id, String name, String notes, Set<Long> genres) {
+        this.id = id;
+        this.name = name;
+        this.notes = notes;
+        this.genres = genres;
+    }
 }

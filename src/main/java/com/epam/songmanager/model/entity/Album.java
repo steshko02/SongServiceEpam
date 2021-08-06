@@ -1,6 +1,7 @@
 package com.epam.songmanager.model.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +11,9 @@ import java.util.Set;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @Entity
 @Table(name="albums")
+@EqualsAndHashCode
 public class Album {
 
     @Id
@@ -25,8 +26,6 @@ public class Album {
 
     private  String notes;
 
-//    @OneToMany(mappedBy="album", fetch=FetchType.EAGER)
-//    private List<Song> songs;
 
     @ManyToMany
     @JoinTable(name="arist_album", joinColumns=@JoinColumn(name="album_id"),
@@ -58,5 +57,14 @@ public class Album {
     public Album(int year, String album) {
         this.name = album;
         this.year = year;
+    }
+
+    public Album(Long id, String name, int year, String notes, Set<Artist> artists, Set<Genre> genres) {
+        this.id = id;
+        this.name = name;
+        this.year = year;
+        this.notes = notes;
+        this.artists = artists;
+        this.genres = genres;
     }
 }

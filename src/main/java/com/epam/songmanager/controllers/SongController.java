@@ -23,8 +23,6 @@ public class SongController {
     private SongService songService;
 
     @Autowired
-    private ResourceRepository resourceRepository;
-    @Autowired
     private AudioParser audioParser;
 
     @RequestMapping(value = "songs/{songId}", method = RequestMethod.GET, produces = {
@@ -39,9 +37,4 @@ public class SongController {
         return new ResponseEntity(inputStreamResource, httpHeaders, HttpStatus.OK);
     }
 
-    @PostMapping("/songs/add")
-    Long uploadFile(@RequestParam MultipartFile file) throws Exception {
-
-        return  null;
-    }
 }
