@@ -1,18 +1,20 @@
 package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.model.entity.Song;
-import com.epam.songmanager.repository.ResourceRepository;
 import com.epam.songmanager.repository.SongRepository;
-import com.epam.songmanager.service.SongService;
-import com.epam.songmanager.utils.AudioParser;
+import com.epam.songmanager.service.ServiceSwitcher;
+import com.epam.songmanager.service.interfaces.SongService;
+import com.epam.songmanager.service.impl.FileSystemStorageService;
+import com.epam.songmanager.service.impl.MinioService;
+import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 public class SongController {
@@ -21,16 +23,23 @@ public class SongController {
     private SongRepository songRepository;
     @Autowired
     private SongService songService;
+    @Autowired
+    private MinioService minioService;
+    @Autowired
+    private FileSystemStorageService fileSystemStorageService;
 
     @Autowired
-    private AudioParser audioParser;
+    private ServiceSwitcher serviceSwitcher;
 
+  //много логики
     @RequestMapping(value = "songs/{songId}", method = RequestMethod.GET, produces = {
             MediaType.APPLICATION_OCTET_STREAM_VALUE })
-    public ResponseEntity playAudio(@PathVariable("songId") Long songId) throws FileNotFoundException {
-        Song song = songRepository.getById(songId);
+    public ResponseEntity playAudio(@PathVariable("songId") Long songId) throws IOException, InvalidResponseException, InvalidKeyException, NoSuchAlgorithmException, ServerException, ErrorResponseException, XmlParserException, InsufficientDataException, InternalException {
+        Song song = songService.getById(songId);
         long length = song.getResource().getSize();
-        InputStreamResource inputStreamResource = new InputStreamResource( new FileInputStream(song.getResource().getPath()));
+        InputStreamResource inputStreamResource = null;
+        inputStreamResource = (InputStreamResource) serviceSwitcher.getByStorageType(song.getResource().getType()).
+                getResource(song.getResource().getPath());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentLength(length);
         httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());

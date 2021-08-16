@@ -1,23 +1,16 @@
 package com.epam.songmanager.service.impl;
 
 import com.epam.songmanager.model.entity.Album;
-import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.repository.AlbumRepository;
-import com.epam.songmanager.repository.ArtistRepository;
-import com.epam.songmanager.repository.GenreRepository;
-import com.epam.songmanager.service.AlbumService;
-import com.epam.songmanager.service.ResourceService;
+import com.epam.songmanager.service.interfaces.AlbumService;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 class AlbumServiceImplTest {
 

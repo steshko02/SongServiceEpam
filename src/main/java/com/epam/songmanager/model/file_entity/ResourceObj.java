@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 
 public interface ResourceObj {
-    void save(InputStream is) throws IOException, NoSuchAlgorithmException;
+//    void save(InputStream is) throws IOException, NoSuchAlgorithmException;
     InputStream read() throws IOException;
-    ResourceObj save(ResourceObj resourceObj) throws IOException;
+//    ResourceObj save(ResourceObj resourceObj) throws IOException;
 }

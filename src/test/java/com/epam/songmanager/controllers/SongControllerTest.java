@@ -1,26 +1,16 @@
 package com.epam.songmanager.controllers;
 
-import com.epam.songmanager.model.entity.Album;
-import com.epam.songmanager.model.entity.Resource;
-import com.epam.songmanager.model.entity.Song;
 import com.epam.songmanager.repository.SongRepository;
-import com.epam.songmanager.service.SongService;
-import com.epam.songmanager.utils.AudioParser;
+import com.epam.songmanager.service.interfaces.SongService;
+import com.epam.songmanager.service.parsers.AudioParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.*;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-
-import java.io.ByteArrayInputStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest(SongController.class)
 class SongControllerTest {

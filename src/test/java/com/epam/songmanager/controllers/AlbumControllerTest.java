@@ -2,8 +2,8 @@ package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.model.entity.Album;
 import com.epam.songmanager.model.dto.AlbumDto;
-import com.epam.songmanager.service.AlbumService;
-import com.epam.songmanager.utils.MappingUtilsAlbums;
+import com.epam.songmanager.service.interfaces.AlbumService;
+import com.epam.songmanager.service.interfaces.MappingUtilsAlbums;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

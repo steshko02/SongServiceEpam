@@ -1,7 +1,7 @@
 package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.model.entity.Genre;
-import com.epam.songmanager.service.GenreService;
+import com.epam.songmanager.service.interfaces.GenreService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

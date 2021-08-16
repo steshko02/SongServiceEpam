@@ -1,29 +1,21 @@
 package com.epam.songmanager.service.impl;
 
-import com.epam.songmanager.SongManagerApplication;
 import com.epam.songmanager.model.entity.Resource;
+import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.repository.ResourceRepository;
-import com.epam.songmanager.service.ResourceService;
-import org.farng.mp3.TagException;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
+import com.epam.songmanager.service.interfaces.ResourceService;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 class ResourceServiceImplTest {
 
@@ -32,15 +24,10 @@ class ResourceServiceImplTest {
     @Autowired
     private ResourceService resourceService;
 
-    @Test
-    void create() throws NoSuchAlgorithmException, TagException, IOException {
-        Resource resource = resourceService.create("checkSum","path",99);
-        assertEquals(resource, new Resource("path",99,"checkSum"));
-    }
 
     @Test
     void addResourceWhenNotExists() {
-        Resource resource = new Resource(1L,"path",99,"checkSum");
+        Resource resource = new Resource(1L,"path",99,"checkSum", StorageType.DISK_FILE_SYSTEM);
         Mockito.when(resourceRepository.existsByChecksum(resource.getChecksum())).thenReturn(false);
         Long id = resourceService.addResource(resource);
         Mockito.verify(resourceRepository,Mockito.times(1)).save(resource);
@@ -50,7 +37,7 @@ class ResourceServiceImplTest {
     }
     @Test
     void addResourceWhenIsExists() {
-        Resource resource = new Resource("path",99,"checkSum");
+        Resource resource = new Resource("path",99,"checkSum", StorageType.DISK_FILE_SYSTEM);
         Long id = resourceService.addResource(resource);
         Mockito.when(resourceRepository.existsByChecksum(resource.getChecksum())).thenReturn(true);
         assertTrue(resourceRepository.existsByChecksum(resource.getChecksum()));
@@ -59,18 +46,18 @@ class ResourceServiceImplTest {
 
     @Test
     void get() {
-        Mockito.when(resourceRepository.getById(1L)).thenReturn(new Resource("path",99,"checkSum"));
+        Mockito.when(resourceRepository.getById(1L)).thenReturn(new Resource("path",99,"checkSum", StorageType.DISK_FILE_SYSTEM));
         Resource resource = resourceService.get(1L);
         Mockito.verify(resourceRepository,Mockito.times(1)).getById(1L);
-        assertEquals(resource,new Resource("path",99,"checkSum"));
+        assertEquals(resource,new Resource("path",99,"checkSum", StorageType.DISK_FILE_SYSTEM));
 
     }
 
     @Test
     void getAll() {
         List<Resource> resources = new ArrayList<>();
-        resources.add(new Resource("path1",99,"checkSum1"));
-        resources.add(new Resource("path1",100,"checkSum1"));
+        resources.add(new Resource("path1",99,"checkSum1", StorageType.DISK_FILE_SYSTEM));
+        resources.add(new Resource("path1",100,"checkSum1", StorageType.DISK_FILE_SYSTEM));
         Mockito.when(resourceRepository.findAll()).thenReturn(resources);
         assertEquals(resources,resourceService.getAll());
         Mockito.verify(resourceRepository,Mockito.times(1)).findAll();

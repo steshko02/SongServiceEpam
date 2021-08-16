@@ -6,7 +6,7 @@ import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.repository.AlbumRepository;
 import com.epam.songmanager.repository.ArtistRepository;
 import com.epam.songmanager.repository.GenreRepository;
-import com.epam.songmanager.service.AlbumService;
+import com.epam.songmanager.service.interfaces.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

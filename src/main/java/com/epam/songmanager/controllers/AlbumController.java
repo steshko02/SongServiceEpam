@@ -1,11 +1,9 @@
 package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.model.dto.AlbumDto;
-import com.epam.songmanager.model.dto.ArtistDto;
-import com.epam.songmanager.service.AlbumService;
-import com.epam.songmanager.utils.MappingUtilsAlbums;
+import com.epam.songmanager.service.interfaces.AlbumService;
+import com.epam.songmanager.service.interfaces.MappingUtilsAlbums;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

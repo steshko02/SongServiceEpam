@@ -1,16 +1,13 @@
 package com.epam.songmanager.service.impl;
 
-import com.epam.songmanager.config.StorageProperties;
 import com.epam.songmanager.exceptions.StorageException;
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
-import com.epam.songmanager.facades.ObjInitializer;
 import com.epam.songmanager.model.file_entity.FileStorageEntity;
-import com.epam.songmanager.service.ResourceService;
-import com.epam.songmanager.service.StorageService;
-import com.epam.songmanager.utils.CheckSum;
+import com.epam.songmanager.service.interfaces.StorageService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -22,30 +19,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 @Service
 public class FileSystemStorageService implements StorageService<FileStorageEntity> {
 
-
-    private final Path rootLocation;  //изменить на String
-
-   @Autowired
-   private CheckSum checkSum ;
+    private final Path rootLocation ;
 
     @Autowired
-    private ResourceService resourceService;
-
-
-    @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
-        this.rootLocation = Paths.get(properties.getLocation());
-    }
-
-
-    public FileSystemStorageService(String s) {
-        this.rootLocation = Paths.get(s);
+    public FileSystemStorageService(  @Qualifier("fileLocation")String rootLocation) {
+        this.rootLocation = Paths.get(rootLocation);
     }
 
     public String store(InputStream stream) throws IOException, NoSuchAlgorithmException {
@@ -61,28 +47,32 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
         UUID uuid = UUID.randomUUID();
         String uuidAsString = uuid.toString();
         Path destinationFile = Paths.get(uuidAsString+".mp3");
-        return rootLocation.relativize(destinationFile);
+        return rootLocation.resolve(destinationFile);
     }
 
     private void createFiles(InputStream stream, String path) throws IOException, NoSuchAlgorithmException {
         File file = new File(path);
-        OutputStream os = new FileOutputStream(file);
-        try {
-            IOUtils.copy(stream,os);
-        }
-        catch (IOException e){
+        try ( stream; OutputStream os = new FileOutputStream(file)) {
+            IOUtils.copy(stream, os);
+        } catch (IOException e) {
             throw new IOException(e);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    //оптимизировать(сделал на скорую)
     @Override
-    public Stream<Path> loadAll() {
+    public List<String> loadAll() {
         try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
-                    .map(this.rootLocation::relativize);
+         List<Path> paths = Files.walk(rootLocation, 1)
+                    .filter(p -> !p.equals(rootLocation))
+                    .map(rootLocation::relativize).collect(Collectors.toList());
+         List<String> stringPaths = new LinkedList<>();
+
+         paths.forEach(p->stringPaths.add(p.toString()));
+
+             return  stringPaths;
         }
         catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
@@ -92,6 +82,7 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
 
     @Override
     public Path load(String filename) {
+
         return rootLocation.resolve(filename);
     }
 
@@ -115,6 +106,7 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
 
     @Override
     public void deleteAll() {
+
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 
@@ -124,13 +116,8 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
     }
 
     @Override
-    public void init() {
-        try {
-            Files.createDirectories(rootLocation);
-        }
-        catch (IOException e) {
-            throw new StorageException("Could not initialize storage", e);
-        }
+    public Resource getResource(String filename) throws FileNotFoundException {
+        return new InputStreamResource( new FileInputStream(filename));
     }
 
 }

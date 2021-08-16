@@ -32,10 +32,10 @@ public abstract class ResourceDecorator  implements ResourceObj {
         this.size = size;
     }
 
-    @Override
-    public void save(InputStream is) throws IOException, NoSuchAlgorithmException {
-        delegate.save(is);
-    }
+//    @Override
+//    public void save(InputStream is) throws IOException, NoSuchAlgorithmException {
+//        delegate.save(is);
+//    }
 
     @Override
     public InputStream read() throws IOException {

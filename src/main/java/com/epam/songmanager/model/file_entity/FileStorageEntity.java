@@ -21,16 +21,16 @@ public class FileStorageEntity extends ResourceDecorator {
         super(checkSumRes,path,length);
     }
 
-    @Override
-    public void save(InputStream is) throws IOException, NoSuchAlgorithmException {
-        try (InputStream  targetInputStream = new DigestInputStream(is,MessageDigest.getInstance("SHA-512"))) {
-                super.save(targetInputStream);
-        } catch (IOException e) {
-            throw new IOException("Exception occurred while encrypting or stream resource handling. ", e);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
+//    @Override
+//    public void save(InputStream is) throws IOException, NoSuchAlgorithmException {
+//        try (InputStream  targetInputStream = new DigestInputStream(is,MessageDigest.getInstance("SHA-512"))) {
+//                super.save(targetInputStream);
+//        } catch (IOException e) {
+//            throw new IOException("Exception occurred while encrypting or stream resource handling. ", e);
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public InputStream read() throws IOException {
@@ -41,9 +41,9 @@ public class FileStorageEntity extends ResourceDecorator {
         }
     }
 
-    @Override
-    public ResourceObj save(ResourceObj resourceObj) throws IOException {
-        return null;
-    }
+//    @Override
+//    public ResourceObj save(ResourceObj resourceObj) throws IOException {
+//        return null;
+//    }
 
 }

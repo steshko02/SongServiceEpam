@@ -6,21 +6,20 @@ import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.repository.ArtistRepository;
 import com.epam.songmanager.repository.GenreRepository;
-import org.junit.BeforeClass;
+import com.epam.songmanager.service.dto_service.MappingAlbumUtilsImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-@RunWith(SpringRunner.class)
+
+
 @SpringBootTest
 class MappingAlbumUtilsImplTest {
 

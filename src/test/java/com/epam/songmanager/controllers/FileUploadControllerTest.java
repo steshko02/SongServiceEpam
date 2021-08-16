@@ -2,7 +2,7 @@ package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.facades.ObjInitializer;
 import com.epam.songmanager.model.file_entity.FileStorageEntity;
-import com.epam.songmanager.service.StorageService;
+import com.epam.songmanager.service.interfaces.StorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -63,14 +62,13 @@ public class FileUploadControllerTest {
     @Test
     void listUploadedFiles() throws Exception {
 
-        List<Path> paths = new ArrayList<>();
-        paths.add(Path.of("test1"));
-        paths.add(Path.of("test2"));
-        paths.add(Path.of("test3"));
+        List<String> paths = new ArrayList<>();
+        paths.add("test1");
+        paths.add("test2");
+        paths.add("test3");
 
-        Stream<Path> pathStream = paths.stream();
 
-        Mockito.when(storageService.loadAll()).thenReturn(pathStream);
+        Mockito.when(storageService.loadAll()).thenReturn(paths);
 
 //        var c = storageService.loadAll().map(
 //                        path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,

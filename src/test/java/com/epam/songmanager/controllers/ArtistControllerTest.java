@@ -2,8 +2,9 @@ package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.model.dto.ArtistDto;
-import com.epam.songmanager.service.ArtistService;
-import com.epam.songmanager.utils.impl.MappingArtistUtilsArtistsImpl;
+import com.epam.songmanager.service.interfaces.ArtistService;
+import com.epam.songmanager.service.interfaces.GenreService;
+import com.epam.songmanager.service.dto_service.MappingArtistUtilsArtistsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +29,8 @@ class ArtistControllerTest {
     private ArtistService artistService;
     @MockBean
     private MappingArtistUtilsArtistsImpl mappingUtils;
+    @MockBean
+    private GenreService genreService;
 
 
     @Test

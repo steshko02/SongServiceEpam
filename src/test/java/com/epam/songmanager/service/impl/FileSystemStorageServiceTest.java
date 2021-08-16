@@ -1,47 +1,26 @@
 package com.epam.songmanager.service.impl;
 
-import com.epam.songmanager.config.StorageProperties;
 import com.epam.songmanager.exceptions.StorageException;
-import com.epam.songmanager.exceptions.StorageFileNotFoundException;
 import com.epam.songmanager.model.file_entity.FileStorageEntity;
-import com.epam.songmanager.service.ResourceService;
-import com.epam.songmanager.service.StorageService;
-import com.epam.songmanager.utils.CheckSum;
+import com.epam.songmanager.service.interfaces.StorageService;
+import io.minio.errors.*;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
 @PrepareForTest(UUID.class)
 class FileSystemStorageServiceTest {
@@ -110,7 +89,7 @@ class FileSystemStorageServiceTest {
 //
 
     @Test
-    void loadAsResource() throws IOException {
+    void loadAsResource() throws IOException, ServerException, ErrorResponseException, NoSuchAlgorithmException, InsufficientDataException, InternalException, InvalidResponseException, XmlParserException, InvalidKeyException {
         String filename = "filename.mp3";
          fileObj = new File("D:\\songs\\"+filename);
 
