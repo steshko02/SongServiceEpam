@@ -12,7 +12,7 @@ import java.util.Objects;
 @Getter
 @AllArgsConstructor
 @Entity
-@EqualsAndHashCode
+
 public class Resource {
 
     @Id

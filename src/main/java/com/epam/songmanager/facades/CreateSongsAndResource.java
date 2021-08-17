@@ -42,46 +42,23 @@ public class CreateSongsAndResource<T extends ResourceDecorator> implements ObjI
     public CreateSongsAndResource(StorageService<T> storageService) {
         this.storageService = storageService;
     }
+
     @Autowired
     private ResourceService resourceService;
 
     @Autowired
-    private AudioParser mp3Parser;
-
-    @Autowired
-    private AlbumService albumService;
-
-    @Autowired
-    private SongService songService;
+    private  Producer producer;
 
     public CreateSongsAndResource() {
-
     }
 
-    private void initSong(Resource resource,File tmp) throws Exception {
-        try {
-            Song song = new Song();
-            mp3Parser.create(tmp);
-            song.setName(mp3Parser.getName());
-            song.setAlbum(albumService.findByName(mp3Parser.getAlbum()));
-            song.setNotes(mp3Parser.getNotes());
-            song.setYear(mp3Parser.getYear());
-
-            song.setResource(resource);
-            songService.addSong(song);
-        }
-        catch (IOException | TagException e){
-            throw new Exception("Error: " + e);
-        }
-    }
-
-    private void initResource(T entity, File file) throws Exception {
+    private void initResource(T entity)  {
         Resource resource =  new Resource( entity.getPath(),entity.getSize(),entity.getCheckSum(),
                 StorageType.getTypeByClass(entity.getClass().getName()));
-        initSong(resource,file);
-        resourceService.addResource(resource);
-    }
 
+        resourceService.addResource(resource);
+        producer.sendMessage(resource.getId().toString());
+    }
 
     @Override
     public void createFiles(InputStream stream,String filename) throws IOException, NoSuchAlgorithmException {
@@ -94,31 +71,23 @@ public class CreateSongsAndResource<T extends ResourceDecorator> implements ObjI
         else createTmpAndMainFile(stream);
     }
 
-    private void  createTmpAndMainFile(InputStream stream) throws NoSuchAlgorithmException, IOException {
+    private void  createTmpAndMainFile(InputStream stream) throws NoSuchAlgorithmException{
 
-        File tmpFile = File.createTempFile("data", fileExtension);
         MessageDigest md = MessageDigest.getInstance(messageDigest);
 
-        try (CountingInputStream is =new CountingInputStream(new DigestInputStream(
-                new TeeInputStream(stream, new FileOutputStream(tmpFile)),md))){
+        try (CountingInputStream is =new CountingInputStream(new DigestInputStream(stream,md))){
 
             String path = storageService.store(is);
             String checkSumRes = CheckSumImpl.create(md);
             if(!resourceService.ifExistsByCheckSum(checkSumRes)){
-                    initResource(storageService.create(checkSumRes,path,
-                            is.getByteCount()),tmpFile);
+                    initResource(storageService.create(checkSumRes,path, is.getByteCount()));
             }
             else {
                 throw  new CheckSumException("there is this song...");
             }
 
-        } catch (CheckSumException e){
-            tmpFile.delete();
+        } catch (Exception e){
             e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            tmpFile.delete();
         }
     }
 

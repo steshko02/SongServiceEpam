@@ -1,6 +1,7 @@
 package com.epam.songmanager.service.impl;
 
 import com.amazonaws.util.IOUtils;
+import com.epam.songmanager.exceptions.StorageException;
 import com.epam.songmanager.model.file_entity.CloudStorageEntity;
 import com.epam.songmanager.service.interfaces.StorageService;
 import io.minio.*;
@@ -44,6 +45,9 @@ public class MinioService implements StorageService<CloudStorageEntity> {
     @Override
     public String store(InputStream entity) throws IOException, NoSuchAlgorithmException, ServerException, InsufficientDataException, InternalException, InvalidResponseException, InvalidKeyException, XmlParserException, ErrorResponseException {
 
+        if (entity == null) {
+            throw new StorageException("Failed to store empty file.");
+        }
         String  filename = createFileName();
         minioClient.putObject(
                 PutObjectArgs.builder().bucket(bucketName).object(filename).stream(
@@ -61,7 +65,6 @@ public class MinioService implements StorageService<CloudStorageEntity> {
 
     @Override
     public List<String> loadAll() {
- //redo it
         List<String> list = new LinkedList<>();
         Iterable<Result<Item>> results =
                 minioClient.listObjects(ListObjectsArgs.builder().bucket(bucketName).build());
@@ -69,7 +72,7 @@ public class MinioService implements StorageService<CloudStorageEntity> {
         results.forEach(r-> {
             try {
                 list.add(r.get().objectName());
-            } catch (ErrorResponseException | NoSuchAlgorithmException | InsufficientDataException | InternalException | InvalidKeyException | InvalidResponseException | IOException | ServerException | XmlParserException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -77,7 +80,7 @@ public class MinioService implements StorageService<CloudStorageEntity> {
     }
 
     @Override
-    public Path load(String filename) throws IOException, InvalidKeyException, InvalidResponseException, InsufficientDataException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, ErrorResponseException {
+    public Path load(String filename)  {
             return  null;
     }
 
@@ -111,7 +114,6 @@ public class MinioService implements StorageService<CloudStorageEntity> {
 
     @Override
     public CloudStorageEntity create(String cs, String path, long size) {
-
         return new CloudStorageEntity(cs,path,size);
     }
 

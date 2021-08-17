@@ -82,7 +82,6 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
 
     @Override
     public Path load(String filename) {
-
         return rootLocation.resolve(filename);
     }
 

@@ -12,18 +12,22 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CreateSongsAndResourceConfig {
 
-    @Autowired
-    private MinioService minioService;
-    @Autowired
-    private FileSystemStorageService fileSystemStorageService;
+//    @Autowired
+//    private MinioService minioService;
+//    @Autowired
+//    private FileSystemStorageService fileSystemStorageService;
 
     @Bean
-    public CreateSongsAndResource<FileStorageEntity> getFileObjBean(){
+    public CreateSongsAndResource<FileStorageEntity> getFileObjBean(
+            FileSystemStorageService fileSystemStorageService
+    ){
         return new CreateSongsAndResource<>(fileSystemStorageService);
     }
 
     @Bean
-    public CreateSongsAndResource<CloudStorageEntity> getCloudObjBean(){
+    public CreateSongsAndResource<CloudStorageEntity> getCloudObjBean(
+            MinioService minioService
+    ){
         return new CreateSongsAndResource<>(minioService);
     }
 

@@ -5,10 +5,12 @@ import com.epam.songmanager.repository.ResourceRepository;
 import com.epam.songmanager.service.interfaces.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ResourceServiceImpl  implements ResourceService {
 
     @Autowired

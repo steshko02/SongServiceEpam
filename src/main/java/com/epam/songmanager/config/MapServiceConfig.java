@@ -12,13 +12,16 @@ import java.util.HashMap;
 
 @Configuration
 public class MapServiceConfig  {
-    @Autowired
-    private StorageService<CloudStorageEntity> minioService;
-    @Autowired
-    private StorageService<FileStorageEntity> fileSystemStorageService;
+//    @Autowired
+//    private StorageService<CloudStorageEntity> minioService;
+//    @Autowired
+//    private StorageService<FileStorageEntity> fileSystemStorageService;
 
     @Bean("serviceHashMap")
-        public HashMap<StorageType, StorageService<?>> mainCharactersByFilmName() {
+        public HashMap<StorageType, StorageService<?>> mainCharactersByFilmName(
+            StorageService<CloudStorageEntity> minioService,
+            StorageService<FileStorageEntity> fileSystemStorageService) {
+
             HashMap<StorageType, StorageService<?>> result = new HashMap<>();
 
             result.put(StorageType.CLOUD_SYSTEM,  minioService);

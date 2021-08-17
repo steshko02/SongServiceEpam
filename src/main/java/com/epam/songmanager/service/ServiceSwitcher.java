@@ -15,7 +15,6 @@ public class ServiceSwitcher {
     @Qualifier("serviceHashMap")
     private Map<StorageType, StorageService<?>> map;
 
-
     public  StorageService<?> getByStorageType(StorageType storageType){
         return  map.get(storageType);
     }

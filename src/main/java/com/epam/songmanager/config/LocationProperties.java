@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix ="storage")
 @Data
-@AllArgsConstructor
+
 public class LocationProperties {
 
     private String location ;

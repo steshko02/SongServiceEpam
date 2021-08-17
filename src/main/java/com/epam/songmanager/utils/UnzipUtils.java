@@ -56,7 +56,9 @@ public class UnzipUtils {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 int count;
                 byte[] data = new byte[BUFFER_SIZE];
-                if (!entry.isDirectory() && entry.getName().matches(".*\\"+MP3_EXTENSION+"(:|$).*")) {
+             //   if (!entry.isDirectory() && entry.getName().matches("(.+)(\\.mp3)$")) {
+                if (!entry.isDirectory()) {
+
                     BufferedOutputStream out = new BufferedOutputStream(
                             outputStream, BUFFER_SIZE);
                     while ((count = inputStream.read(data, 0, BUFFER_SIZE)) != -1) {

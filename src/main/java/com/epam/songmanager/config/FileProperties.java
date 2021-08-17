@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "file")
 @Data
-@AllArgsConstructor
-
 public class FileProperties {
 
     private  String fileExtension;

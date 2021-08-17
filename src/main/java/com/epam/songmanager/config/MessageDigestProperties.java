@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "md")
 @Data
-@AllArgsConstructor
-
 public class MessageDigestProperties {
     private  String messageDigestType;
 
