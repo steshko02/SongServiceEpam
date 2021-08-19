@@ -1,5 +1,6 @@
 package com.epam.songmanager.controllers;
 
+import com.epam.songmanager.exceptions.EntityNotFoundException;
 import com.epam.songmanager.model.dto.AlbumDto;
 import com.epam.songmanager.service.interfaces.AlbumService;
 import com.epam.songmanager.service.interfaces.MappingUtilsAlbums;
@@ -12,24 +13,23 @@ public class AlbumController {
     private AlbumService albumService;
     @Autowired
     private MappingUtilsAlbums mappingUtilsAlbums;
-
-
+    
     @PostMapping("/albums")
     public  Long add(@RequestBody AlbumDto albumDto){
         return albumService.add(mappingUtilsAlbums.mapToEntity(albumDto));
     }
 
     @PutMapping("/albums/{id}")
-    public  Long edit(@RequestBody AlbumDto albumDto,@PathVariable Long id){
+    public  Long edit(@RequestBody AlbumDto albumDto,@PathVariable Long id) throws EntityNotFoundException {
         return albumService.edit( mappingUtilsAlbums.mapToEntity(albumDto), id);
     }
     @GetMapping("/albums/{id}")
-    public AlbumDto getGenres(@PathVariable Long id) {
+    public AlbumDto getGenres(@PathVariable Long id) throws EntityNotFoundException {
         return mappingUtilsAlbums.mapToDto(albumService.get(id));
     }
 
     @DeleteMapping("/albums")
-    public Long[] delete(@RequestParam Long[] id){
+    public Long[] delete(@RequestParam Long[] id) throws EntityNotFoundException{
         return  albumService.delete(id);
     }
 

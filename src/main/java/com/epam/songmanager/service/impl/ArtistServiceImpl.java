@@ -1,5 +1,6 @@
 package com.epam.songmanager.service.impl;
 
+import com.epam.songmanager.exceptions.EntityNotFoundException;
 import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.repository.ArtistRepository;
@@ -7,6 +8,7 @@ import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.service.interfaces.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,19 +38,26 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Long edit(Artist artist,Long id) {
-        Artist artistForEdit = artistRepository.getById(id);
-        if (checkExist(artist.getGenres())){
+        Artist artistForEdit = artistRepository.findById(id).orElse(null);
+
+        if (checkExist(artist.getGenres()) &&
+                artistForEdit!=null){
             artistForEdit.setName(artist.getName());
             artistForEdit.setNotes(artist.getNotes());
             artistForEdit.setGenres(artist.getGenres());
             artistRepository.save(artistForEdit);
+            return artistForEdit.getId();
         }
-        return artistForEdit.getId();
+        throw new EntityNotFoundException(Artist.class, "id", id.toString());
     }
 
     @Override
     public Artist get(Long id) {
-       return artistRepository.getById(id);
+        Artist artist = artistRepository.findById(id).orElse(null);
+        if(artist == null){
+            throw new EntityNotFoundException(Artist.class, "id", id.toString());
+        }
+        return artist;
     }
 
     @Override

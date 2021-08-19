@@ -1,5 +1,6 @@
 package com.epam.songmanager.controllers;
 
+import com.epam.songmanager.exceptions.FileParseException;
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
 import com.epam.songmanager.facades.ObjInitializer;
 import com.epam.songmanager.model.file_entity.FileStorageEntity;
@@ -30,8 +31,6 @@ public class FileUploadController {
     @Autowired
     private  ObjInitializer <FileStorageEntity> objInitializer;
 
-
-
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
         model.addAttribute("files", storageService.loadAll().stream().map(
@@ -53,8 +52,7 @@ public class FileUploadController {
 
      @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) throws Exception {
-
+                                   RedirectAttributes redirectAttributes) throws Exception, FileParseException {
 
       objInitializer.createFiles(file.getInputStream(),file.getOriginalFilename());
 

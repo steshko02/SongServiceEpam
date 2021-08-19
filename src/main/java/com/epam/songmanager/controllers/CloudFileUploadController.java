@@ -1,5 +1,6 @@
 package com.epam.songmanager.controllers;
 
+import com.epam.songmanager.exceptions.FileParseException;
 import com.epam.songmanager.facades.ObjInitializer;
 import com.epam.songmanager.model.file_entity.CloudStorageEntity;
 import com.epam.songmanager.service.interfaces.StorageService;
@@ -34,7 +35,7 @@ public class CloudFileUploadController {
 
     @PostMapping("/s3")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) throws Exception {
+                                   RedirectAttributes redirectAttributes) throws Exception, FileParseException {
         objInitializer.createFiles(file.getInputStream(),file.getOriginalFilename());
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");

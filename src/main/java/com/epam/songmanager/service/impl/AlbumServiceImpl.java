@@ -1,5 +1,6 @@
 package com.epam.songmanager.service.impl;
 
+import com.epam.songmanager.exceptions.EntityNotFoundException;
 import com.epam.songmanager.model.entity.Album;
 import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.model.entity.Genre;
@@ -10,6 +11,7 @@ import com.epam.songmanager.service.interfaces.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -33,16 +35,17 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public Long edit(Album album, Long id) {
-        Album albumForEdit = albumRepository.getById(id);
-        if (checkExistGenres(album.getGenres())
-                && checkExistArtists(album.getArtists()) ){
+      Album albumForEdit = albumRepository.findById(id).orElse(null);
+        if (checkExistGenres(album.getGenres()) &&
+                albumForEdit!=null){
             albumForEdit.setName(album.getName());
             albumForEdit.setNotes(album.getNotes());
             albumForEdit.setGenres(album.getGenres());
             albumForEdit.setArtists(album.getArtists());
             albumRepository.save(albumForEdit);
+            return albumForEdit.getId();
         }
-        return albumForEdit.getId();
+        throw new EntityNotFoundException(Album.class, "id", id.toString());
     }
 
     private boolean checkExistGenres(Set<Genre> genres){
@@ -61,20 +64,14 @@ public class AlbumServiceImpl implements AlbumService {
         return true;
     }
 
-//    public Long edit(Album album, Long id) {
-//        Album albumForEdit = albumRepository.getById(id);
-//        if (checkExistGenres(album.ge())){
-//            artistForEdit.setName(artist.getName());
-//            artistForEdit.setNotes(artist.getNotes());
-//            artistForEdit.setGenres(artist.getGenres());
-//            artistRepository.save(artistForEdit);
-//        }
-//        return artistForEdit.getId();
-//    }
 
     @Override
     public Album get(Long id) {
-        return albumRepository.getById(id);
+        Album album = albumRepository.findById(id).orElse(null);
+        if(album == null){
+            throw new EntityNotFoundException(Album.class, "id", id.toString());
+        }
+        return album;
     }
 
     @Override
@@ -87,6 +84,11 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public Album findByName(String name) {
-        return albumRepository.findByName(name);
+
+        Album album = albumRepository.findByName(name);
+        if(album == null){
+            throw new EntityNotFoundException(Album.class, "name", name);
+        }
+        return album;
     }
 }

@@ -1,8 +1,14 @@
 package com.epam.songmanager.exceptions;
 
+
+
 public class FileParseException extends Exception{
 
-    public FileParseException(String message) {
-        super(message);
+    public FileParseException(Class clazz) {
+        super(FileParseException.generateMessage(clazz.getSimpleName()));
+    }
+
+    private static String generateMessage(String classname) {
+        return  classname + " failed parse file";
     }
 }

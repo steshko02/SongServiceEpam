@@ -1,5 +1,6 @@
 package com.epam.songmanager.facades;
 
+import com.epam.songmanager.exceptions.FileParseException;
 import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.model.entity.Song;
 import com.epam.songmanager.service.ServiceSwitcher;
@@ -49,7 +50,6 @@ public class CreateResource {
         @SendTo("zip")
         public String init(String message)  {
             try {
-
                 Resource resource = resourceService.get(Long.valueOf(message));
                 InputStream is = serviceSwitcher.getByStorageType(resource.getType()).
                         loadAsResource(resource.getPath()).getInputStream();
@@ -79,19 +79,20 @@ public class CreateResource {
             return null;
         }
 
-        private void createSong(Resource resource, File tmp) throws Exception {
-        try {
-            Song song = new Song();
-            mp3Parser.create(tmp);
-            song.setName(mp3Parser.getName());
-            song.setAlbum(albumService.findByName(mp3Parser.getAlbum()));
-            song.setNotes(mp3Parser.getNotes());
-            song.setYear(mp3Parser.getYear());
-            song.setResource(resource);
-            songService.addSong(song);
+        private void createSong(Resource resource, File tmp) throws Exception, FileParseException {
+            try {
+                Song song = new Song();
+                mp3Parser.create(tmp);
+                song.setName(mp3Parser.getName());
+                song.setAlbum(albumService.findByName(mp3Parser.getAlbum()));
+                song.setNotes(mp3Parser.getNotes());
+                song.setYear(mp3Parser.getYear());
+                song.setResource(resource);
+                songService.addSong(song);
+            } catch (IOException | TagException e) {
+                throw new Exception("Error: " + e);
+            } catch (FileParseException e) {
+                throw new FileParseException(AudioParser.class);
+            }
         }
-        catch (IOException | TagException e){
-            throw new Exception("Error: " + e);
-        }
-    }
 }

@@ -1,6 +1,8 @@
 package com.epam.songmanager.service.impl;
 
+import com.epam.songmanager.exceptions.EntityNotFoundException;
 import com.epam.songmanager.model.entity.Album;
+import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.model.entity.Song;
 import com.epam.songmanager.repository.SongRepository;
@@ -20,7 +22,11 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public Song getById(Long id) {
-        return  songRepository.getById(id);
+        Song song = songRepository.findById(id).orElse(null);
+        if(song == null){
+            throw new EntityNotFoundException(Song.class, "id", id.toString());
+        }
+        return song;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.epam.songmanager.service.impl;
 
+import com.epam.songmanager.exceptions.EntityNotFoundException;
 import com.epam.songmanager.model.entity.Genre;
+import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.service.interfaces.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,10 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre getById(Long id) {
-        return genreRepository.getById(id);
+        Genre genre =genreRepository.findById(id).orElse(null);
+        if(genre == null){
+            throw new EntityNotFoundException(Resource.class, "id", id.toString());
+        }
+        return genre;
     }
 }

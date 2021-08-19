@@ -1,5 +1,6 @@
 package com.epam.songmanager.controllers;
 
+import com.epam.songmanager.exceptions.EntityNotFoundException;
 import com.epam.songmanager.model.entity.Song;
 import com.epam.songmanager.repository.SongRepository;
 import com.epam.songmanager.service.ServiceSwitcher;
@@ -7,6 +8,7 @@ import com.epam.songmanager.service.interfaces.SongService;
 import com.epam.songmanager.service.impl.FileSystemStorageService;
 import com.epam.songmanager.service.impl.MinioService;
 import io.minio.errors.*;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
@@ -32,9 +34,10 @@ public class SongController {
     private ServiceSwitcher serviceSwitcher;
 
   //много логики
+    @SneakyThrows
     @RequestMapping(value = "songs/{songId}", method = RequestMethod.GET, produces = {
             MediaType.APPLICATION_OCTET_STREAM_VALUE })
-    public ResponseEntity playAudio(@PathVariable("songId") Long songId) throws IOException, InvalidResponseException, InvalidKeyException, NoSuchAlgorithmException, ServerException, ErrorResponseException, XmlParserException, InsufficientDataException, InternalException {
+    public ResponseEntity playAudio(@PathVariable("songId") Long songId) throws EntityNotFoundException {
         Song song = songService.getById(songId);
         long length = song.getResource().getSize();
         InputStreamResource inputStreamResource = null;
