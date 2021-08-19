@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

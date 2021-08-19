@@ -1,6 +1,5 @@
 package com.epam.songmanager.facades;
 
-
 import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.model.entity.Song;
 import com.epam.songmanager.service.ServiceSwitcher;
@@ -9,10 +8,10 @@ import com.epam.songmanager.service.interfaces.ResourceService;
 import com.epam.songmanager.service.interfaces.SongService;
 import com.epam.songmanager.service.parsers.AudioParser;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+
 import org.farng.mp3.TagException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jms.JmsException;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
@@ -57,7 +56,7 @@ public class CreateResource {
 
                 createSong(resource, createTmpFileForParse(is));
 
-                return "Resource" + message+ "parsed";
+                return "Resource " + message+ " parsed";
             } catch ( Exception e) {
                 e.printStackTrace();
             }
@@ -88,7 +87,6 @@ public class CreateResource {
             song.setAlbum(albumService.findByName(mp3Parser.getAlbum()));
             song.setNotes(mp3Parser.getNotes());
             song.setYear(mp3Parser.getYear());
-
             song.setResource(resource);
             songService.addSong(song);
         }

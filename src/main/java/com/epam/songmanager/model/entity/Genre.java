@@ -11,7 +11,6 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @Entity
-@EqualsAndHashCode
 public class Genre {
 
     @Id

@@ -13,7 +13,6 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name="albums")
-@EqualsAndHashCode
 public class Album {
 
     @Id

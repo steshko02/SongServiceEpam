@@ -17,7 +17,7 @@ public class UnzipUtils {
     private final static String ZIP_EXTENSION = ".zip";
     private final static String MP3_EXTENSION = ".mp3";
 
-    public static List<ByteArrayInputStream> getInputStreams(FileInputStream inputStream) throws IOException {
+    public  List<ByteArrayInputStream> getInputStreams(FileInputStream inputStream) throws IOException {
 
        BufferedInputStream bis = new BufferedInputStream(inputStream);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -38,11 +38,11 @@ public class UnzipUtils {
 
     }
 
-    public static boolean isZip(String filename){
+    public  boolean isZip(String filename){
         return filename.matches(".*\\.zip(:|$).*");
     }
 
-    public static List<ByteArrayOutputStream> unzip(ByteArrayOutputStream zippedFileOS) {
+    public  List<ByteArrayOutputStream> unzip(ByteArrayOutputStream zippedFileOS) {
         try{
 
             ZipInputStream inputStream = new ZipInputStream(

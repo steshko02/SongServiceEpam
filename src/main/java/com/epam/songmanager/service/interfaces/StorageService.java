@@ -5,14 +5,12 @@ import com.epam.songmanager.model.file_entity.ResourceDecorator;
 import io.minio.errors.*;
 import org.springframework.core.io.Resource;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.stream.Stream;
 
 public interface StorageService <T extends ResourceDecorator> {
 

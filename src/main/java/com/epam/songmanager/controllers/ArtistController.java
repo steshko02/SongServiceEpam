@@ -6,6 +6,7 @@ import com.epam.songmanager.model.dto.ArtistDto;
 import com.epam.songmanager.service.interfaces.ArtistService;
 import com.epam.songmanager.service.interfaces.GenreService;
 import com.epam.songmanager.service.dto_service.MappingArtistUtilsArtistsImpl;
+import com.epam.songmanager.service.interfaces.MappingUtilsArtists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class ArtistController {
     @Autowired
     private ArtistService artistService;
     @Autowired
-    private MappingArtistUtilsArtistsImpl mappingUtils;
+    private MappingUtilsArtists mappingUtils;
     @Autowired
     private GenreService genreService;
 
@@ -45,10 +46,9 @@ public class ArtistController {
     public Set<ArtistDto> getByFilters(@RequestParam String name, @RequestParam Long[] genres) {
 
         Set<ArtistDto> artistDtoSet = new HashSet<>();
-        Set<Genre> forFilter = new HashSet<>();
-        Arrays.stream(genres).forEach(id->forFilter.add(genreService.getById(id)));
-        Set<Artist> artists = artistService.getByFullFilter(name,forFilter);
+        List<Artist> artists = artistService.getByFilters(name,genres);
         artists.forEach(a->artistDtoSet.add(mappingUtils.mapToDto(a)));
-        return artistDtoSet;
+
+        return   artistDtoSet;
     }
 }
