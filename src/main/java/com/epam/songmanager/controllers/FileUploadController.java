@@ -2,8 +2,9 @@ package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.exceptions.FileParseException;
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
-import com.epam.songmanager.facades.ObjInitializer;
+import com.epam.songmanager.facades.CreateResource;
 import com.epam.songmanager.model.resource.FileStorageEntity;
+import com.epam.songmanager.repository.ResourceRepository;
 import com.epam.songmanager.service.interfaces.StorageService;
 import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,14 @@ public class FileUploadController {
     private  StorageService <FileStorageEntity> storageService;
 
     @Autowired
-    private  ObjInitializer <FileStorageEntity> objInitializer;
+    private CreateResource<FileStorageEntity> createResource;
+
+    @Autowired
+    private ResourceRepository resourceRepository;
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
+
         model.addAttribute("files", storageService.loadAll().stream().map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFile", path).build().toUri().toString())
@@ -40,7 +45,7 @@ public class FileUploadController {
         return "uploadForm";
     }
 
-    @GetMapping("/files/{filename:.+}")
+    @GetMapping("/files/{filename}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws IOException, InvalidResponseException, InvalidKeyException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, InsufficientDataException, ErrorResponseException {
 
@@ -53,7 +58,7 @@ public class FileUploadController {
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes) throws Exception, FileParseException {
 
-      objInitializer.createFiles(file.getInputStream(),file.getOriginalFilename());
+      createResource.createFiles(file.getInputStream(),file.getOriginalFilename());
 
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");

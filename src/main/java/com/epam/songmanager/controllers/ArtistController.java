@@ -7,6 +7,7 @@ import com.epam.songmanager.service.interfaces.ArtistService;
 import com.epam.songmanager.service.interfaces.GenreService;
 import com.epam.songmanager.service.interfaces.MappingUtilsArtists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -18,24 +19,26 @@ public class ArtistController {
 
     @Autowired
     private ArtistService artistService;
-    @Autowired
-    private MappingUtilsArtists mappingUtils;
+
     @Autowired
     private GenreService genreService;
 
+    @Autowired
+    private ConversionService conversionService;
+
     @PostMapping("/artists")
     public  Long add(@RequestBody  ArtistDto artistDto){
-        return artistService.add(mappingUtils.mapToEntity(artistDto));
+        return artistService.add(conversionService.convert(artistDto,Artist.class));
     }
 
     @PutMapping("/artists/{id}")
     public  Long edit(@RequestBody ArtistDto artistDto,@PathVariable  Long id) throws EntityNotFoundException {
-        return artistService.edit( mappingUtils.mapToEntity(artistDto), id);
+        return artistService.edit(conversionService.convert(artistDto,Artist.class), id);
     }
 
     @GetMapping("/artists/{id}")
     public ArtistDto getGenres(@PathVariable Long id) throws EntityNotFoundException{
-        return mappingUtils.mapToDto(artistService.get(id));
+        return conversionService.convert(artistService.get(id),ArtistDto.class);
     }
 
     @DeleteMapping("/artists")
@@ -48,7 +51,7 @@ public class ArtistController {
 
         Set<ArtistDto> artistDtoSet = new HashSet<>();
         List<Artist> artists = artistService.getByFilters(name,genres);
-        artists.forEach(a->artistDtoSet.add(mappingUtils.mapToDto(a)));
+        artists.forEach(a->artistDtoSet.add(conversionService.convert(a,ArtistDto.class)));
 
         return   artistDtoSet;
     }

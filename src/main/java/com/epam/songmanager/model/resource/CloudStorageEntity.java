@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 public class CloudStorageEntity extends ResourceDecorator {
 
-        @Override
+    @Override
     public InputStream read() throws IOException {
         try {
             return super.read();
@@ -16,9 +16,8 @@ public class CloudStorageEntity extends ResourceDecorator {
         }
     }
 
-    public CloudStorageEntity(String checkSum, String path, long size) {
-        super( checkSum,path,size);
+    public CloudStorageEntity(String path, long size, String checkSum) {
+        super(path, size, checkSum);
     }
-
-
 }
+

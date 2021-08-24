@@ -11,9 +11,9 @@ import java.util.Objects;
 @Setter
 @Getter
 @AllArgsConstructor
-@Entity
 
-public class Resource {
+@Entity
+public  class Resource {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,13 +26,19 @@ public class Resource {
     private  String checksum;
 
     @Enumerated(EnumType.STRING)
-    private StorageType type;
+    private  StorageType type;
 
-    public Resource(String path, long size, String checksum,StorageType type) {
+    public Resource(String path, long size, String checksum, StorageType type) {
         this.path = path;
         this.size = size;
         this.checksum = checksum;
         this.type = type;
+    }
+
+    public Resource(String path, long size, String checksum) {
+        this.path = path;
+        this.size = size;
+        this.checksum = checksum;
     }
 
     @Override
@@ -47,6 +53,7 @@ public class Resource {
     public int hashCode() {
         return Objects.hash(id, path, size, checksum);
     }
+
 
     public Resource() {
 

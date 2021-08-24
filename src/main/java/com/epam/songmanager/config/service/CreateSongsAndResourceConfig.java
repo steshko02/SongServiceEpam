@@ -1,8 +1,7 @@
 package com.epam.songmanager.config.service;
 
-import com.epam.songmanager.config.properties.FileProperties;
 import com.epam.songmanager.config.properties.MessageDigestProperties;
-import com.epam.songmanager.facades.CreateSongsAndResource;
+import com.epam.songmanager.facades.CreateResourceImpl;
 import com.epam.songmanager.model.resource.CloudStorageEntity;
 import com.epam.songmanager.model.resource.FileStorageEntity;
 import com.epam.songmanager.service.impl.FileSystemStorageService;
@@ -16,19 +15,19 @@ import org.springframework.context.annotation.Configuration;
 public class CreateSongsAndResourceConfig {
 
     @Bean
-    public CreateSongsAndResource<FileStorageEntity> getFileObjBean(
+    public CreateResourceImpl<FileStorageEntity> getFileObjBean(
             FileSystemStorageService fileSystemStorageService,
             MessageDigestProperties messageDigestProperties
     ){
-        return new CreateSongsAndResource<>(fileSystemStorageService,
+        return new CreateResourceImpl<>(fileSystemStorageService,
                 messageDigestProperties.getMessageDigestType());
     }
 
     @Bean
-    public CreateSongsAndResource<CloudStorageEntity> getCloudObjBean(
+    public CreateResourceImpl<CloudStorageEntity> getCloudObjBean(
             MinioService minioService, MessageDigestProperties messageDigestProperties
     ){
-        return new CreateSongsAndResource<>(minioService,
+        return new CreateResourceImpl<>(minioService,
                 messageDigestProperties.getMessageDigestType());
     }
 

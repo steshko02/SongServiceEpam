@@ -11,7 +11,7 @@ import java.security.MessageDigest;
 @UtilityClass
 public class CheckSumImpl  {
 
-    public String calculate(InputStream stream, MessageDigest md) throws IOException {
+    public static String calculate(InputStream stream, MessageDigest md) throws IOException {
         try (
                 var fis = stream;
                 var bis = new BufferedInputStream(fis);
@@ -27,12 +27,12 @@ public class CheckSumImpl  {
         return result.toString();
     }
 
-    public boolean check(String storageFile, String resourceFile) throws IOException {
+    public static boolean check(String storageFile, String resourceFile) throws IOException {
         return storageFile.equals(resourceFile);
     }
 
 
-    public String create(MessageDigest md) {
+    public static String create(MessageDigest md) {
         StringBuilder res = new StringBuilder();
         for (byte b : md.digest()) {
             res.append(String.format("%02x", b));

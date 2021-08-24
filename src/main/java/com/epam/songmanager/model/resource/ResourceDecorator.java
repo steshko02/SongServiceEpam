@@ -10,13 +10,11 @@ public abstract class ResourceDecorator  implements ResourceObj {
 
     private ResourceObj delegate;
 
-    private  String  checkSum;
-
     private  String path;
 
     private  long size;
 
-
+    private  String  checkSum;
     public ResourceDecorator(ResourceObj delegate) {
         this.delegate = delegate;
     }
@@ -25,7 +23,7 @@ public abstract class ResourceDecorator  implements ResourceObj {
 
     }
 
-    public ResourceDecorator(String checkSum, String path, long size) {
+    public ResourceDecorator( String path, long size,String checkSum) {
         this.checkSum = checkSum;
         this.path = path;
         this.size = size;

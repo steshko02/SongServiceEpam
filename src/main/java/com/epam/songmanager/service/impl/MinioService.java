@@ -3,7 +3,9 @@ package com.epam.songmanager.service.impl;
 import com.amazonaws.util.IOUtils;
 import com.epam.songmanager.config.properties.BucketProperties;
 import com.epam.songmanager.exceptions.StorageException;
+import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.model.resource.CloudStorageEntity;
+import com.epam.songmanager.model.resource.ResourceDecorator;
 import com.epam.songmanager.model.resource.ResourceObj;
 import com.epam.songmanager.service.interfaces.StorageService;
 import io.minio.*;
@@ -33,6 +35,8 @@ import java.util.UUID;
 @EnableConfigurationProperties(BucketProperties.class)
 public class MinioService implements StorageService<CloudStorageEntity> {
 
+    private final  StorageType storageType = StorageType.CLOUD_SYSTEM;
+
     private final String bucketName ;
 
     @Autowired
@@ -44,17 +48,17 @@ public class MinioService implements StorageService<CloudStorageEntity> {
     private MinioClient minioClient;
 
     @Override
-    public String store(InputStream entity) throws IOException, NoSuchAlgorithmException, ServerException, InsufficientDataException, InternalException, InvalidResponseException, InvalidKeyException, XmlParserException, ErrorResponseException {
+    public String store(InputStream is) throws IOException, NoSuchAlgorithmException, ServerException, InsufficientDataException, InternalException, InvalidResponseException, InvalidKeyException, XmlParserException, ErrorResponseException {
 
-        if (entity == null) {
+        if (is == null) {
             throw new StorageException("Failed to store empty file.");
         }
         String  filename = createFileName();
         minioClient.putObject(
                 PutObjectArgs.builder().bucket(bucketName).object(filename).stream(
-                        entity, entity.available(), -1)
+                        is, is.available(), -1)
                         .build());
-        entity.close();
+        is.close();
         return  filename;
     }
 
@@ -115,7 +119,7 @@ public class MinioService implements StorageService<CloudStorageEntity> {
 
     @Override
     public CloudStorageEntity create(String cs, String path, long size) {
-        return new CloudStorageEntity(cs,path,size);
+        return new CloudStorageEntity(path,size,cs);
     }
 
     @Override
@@ -125,12 +129,12 @@ public class MinioService implements StorageService<CloudStorageEntity> {
                         .bucket(bucketName)
                         .object(filename)
                         .build())) {
-            return new InputStreamResource(new ByteArrayInputStream(stream.readAllBytes()));
+            return new ByteArrayResource(stream.readAllBytes());
         }
     }
 
 
-    public boolean supports(Class<? extends ResourceObj> resource) {
-        return true;
+    public boolean supports(StorageType resource) {
+        return resource.equals(storageType);
     }
 }

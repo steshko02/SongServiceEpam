@@ -9,4 +9,5 @@ public interface SongService {
     void addSong(Song song);
     Song create(String name, int year, String notes, Resource resource, Album album);
     Song getById(Long id);
+    org.springframework.core.io.Resource getSongAsResource(Long id);
 }

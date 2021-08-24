@@ -1,6 +1,7 @@
 package com.epam.songmanager.service.interfaces;
 
 
+import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.model.resource.ResourceDecorator;
 import com.epam.songmanager.model.resource.ResourceObj;
 import io.minio.errors.*;
@@ -29,5 +30,5 @@ public interface StorageService<T extends ResourceDecorator> {
 
     Resource getResource(String filename) throws IOException, InvalidResponseException, InvalidKeyException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, InsufficientDataException, ErrorResponseException;
 
-    boolean supports(Class<? extends ResourceObj> resource);
+    boolean supports(StorageType storageType);
 }

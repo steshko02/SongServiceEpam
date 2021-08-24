@@ -1,6 +1,6 @@
 package com.epam.songmanager.controllers;
 
-import com.epam.songmanager.facades.ObjInitializer;
+import com.epam.songmanager.facades.CreateResource;
 import com.epam.songmanager.model.resource.FileStorageEntity;
 import com.epam.songmanager.service.interfaces.StorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +40,7 @@ public class FileUploadControllerTest {
     private StorageService<FileStorageEntity> storageService;
 
     @MockBean
-    private ObjInitializer<FileStorageEntity> objInitializer;
+    private CreateResource<FileStorageEntity> createResource;
 
     @Test
     public void uploadsFile() throws Exception {
