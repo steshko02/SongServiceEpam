@@ -1,4 +1,5 @@
-package com.epam.songmanager.model.file_entity;
+package com.epam.songmanager.model.resource;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,7 +7,7 @@ import java.io.InputStream;
 
 public class CloudStorageEntity extends ResourceDecorator {
 
-    @Override
+        @Override
     public InputStream read() throws IOException {
         try {
             return super.read();
@@ -19,8 +20,5 @@ public class CloudStorageEntity extends ResourceDecorator {
         super( checkSum,path,size);
     }
 
-    //    @Override
-//    public ResourceObj save(ResourceObj resourceObj) throws IOException {
-//        return null;
-//    }
+
 }

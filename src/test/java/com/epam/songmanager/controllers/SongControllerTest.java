@@ -26,29 +26,4 @@ class SongControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    void playAudio() throws Exception {
-//        Resource resource = new Resource(1L,"path",99,"checkSum");
-//        Album album = new Album(1L,"TEST",1999,"Some text");
-//        Song song = new Song(1L,"name",1997,"notes",album,resource);
-//
-//        Mockito.when(songRepository.getById(1L)).thenReturn(song);
-//
-//        InputStreamResource inputStream = new InputStreamResource(new ByteArrayInputStream("song.mp3".getBytes()));
-//
-//
-//
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//
-//        httpHeaders.setContentLength("song.mp3".getBytes().length);
-//        httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
-//
-//        ResponseEntity responseEntity = new ResponseEntity(inputStream, httpHeaders, HttpStatus.OK);
-//
-//
-//        mockMvc.perform(
-//                post("/songs/1")
-//        )
-//                .andExpect((ResultMatcher) responseEntity);
-    }
 }

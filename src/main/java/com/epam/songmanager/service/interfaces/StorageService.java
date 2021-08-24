@@ -1,7 +1,8 @@
 package com.epam.songmanager.service.interfaces;
 
 
-import com.epam.songmanager.model.file_entity.ResourceDecorator;
+import com.epam.songmanager.model.resource.ResourceDecorator;
+import com.epam.songmanager.model.resource.ResourceObj;
 import io.minio.errors.*;
 import org.springframework.core.io.Resource;
 
@@ -12,9 +13,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public interface StorageService <T extends ResourceDecorator> {
-
-
+public interface StorageService<T extends ResourceDecorator> {
 
     String store(InputStream entity) throws IOException, NoSuchAlgorithmException, ServerException, InsufficientDataException, InternalException, InvalidResponseException, InvalidKeyException, XmlParserException, ErrorResponseException;
 
@@ -29,6 +28,6 @@ public interface StorageService <T extends ResourceDecorator> {
     T create(String cs,String filename,long size);
 
     Resource getResource(String filename) throws IOException, InvalidResponseException, InvalidKeyException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, InsufficientDataException, ErrorResponseException;
-//    boolean createTmpFile (InputStream inputStream);
 
+    boolean supports(Class<? extends ResourceObj> resource);
 }

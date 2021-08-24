@@ -2,7 +2,7 @@ package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.exceptions.FileParseException;
 import com.epam.songmanager.facades.ObjInitializer;
-import com.epam.songmanager.model.file_entity.CloudStorageEntity;
+import com.epam.songmanager.model.resource.CloudStorageEntity;
 import com.epam.songmanager.service.interfaces.StorageService;
 import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class CloudFileUploadController {
     private ObjInitializer<CloudStorageEntity> objInitializer;
 
     @GetMapping("/s3")
-    public String listUploadedFiles(Model model) throws IOException {
+    public String listUploadedFiles(Model model)  {
 
         model.addAttribute("files",storageService.loadAll());
         return "s3UploadForm";
@@ -35,7 +35,7 @@ public class CloudFileUploadController {
 
     @PostMapping("/s3")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) throws Exception, FileParseException {
+                                   RedirectAttributes redirectAttributes) throws Exception {
         objInitializer.createFiles(file.getInputStream(),file.getOriginalFilename());
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");

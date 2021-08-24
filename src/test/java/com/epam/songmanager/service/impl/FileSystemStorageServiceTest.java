@@ -1,7 +1,7 @@
 package com.epam.songmanager.service.impl;
 
 import com.epam.songmanager.exceptions.StorageException;
-import com.epam.songmanager.model.file_entity.FileStorageEntity;
+import com.epam.songmanager.model.resource.FileStorageEntity;
 import com.epam.songmanager.service.interfaces.StorageService;
 import io.minio.errors.*;
 import org.junit.After;

@@ -1,4 +1,4 @@
-package com.epam.songmanager.service.dto_service;
+package com.epam.songmanager.service.converters;
 
 import com.epam.songmanager.model.entity.Album;
 import com.epam.songmanager.model.entity.Artist;
@@ -8,19 +8,16 @@ import com.epam.songmanager.repository.ArtistRepository;
 import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.service.interfaces.MappingUtilsAlbums;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MappingAlbumUtilsImpl implements MappingUtilsAlbums {
+public class AlbumToDtoConverter
+        implements Converter<Album, AlbumDto> {
 
-    @Autowired
-    private ArtistRepository artistRepository;
-
-    @Autowired
-    private GenreRepository genreRepository;
 
     @Override
-    public AlbumDto mapToDto(Album entity) {
+    public AlbumDto convert(Album entity) {
         AlbumDto dto = new AlbumDto();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
@@ -33,21 +30,5 @@ public class MappingAlbumUtilsImpl implements MappingUtilsAlbums {
             dto.getArtists().add(a.getId());
         }
         return dto;
-    }
-
-    @Override
-    public Album mapToEntity(AlbumDto dto) {
-        Album entity = new Album();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setNotes(dto.getNotes());
-        entity.setYear(dto.getYear());
-        for (Long id: dto.getGenres()) {
-            entity.getGenres().add(genreRepository.getById(id));
-        }
-        for (Long a: dto.getArtists()) {
-            entity.getArtists().add(artistRepository.getById(a));
-        }
-        return entity;
     }
 }

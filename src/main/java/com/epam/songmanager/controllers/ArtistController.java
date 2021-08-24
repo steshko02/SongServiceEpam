@@ -1,19 +1,17 @@
 package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.exceptions.EntityNotFoundException;
-import com.epam.songmanager.model.entity.Artist;
-import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.model.dto.ArtistDto;
+import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.service.interfaces.ArtistService;
 import com.epam.songmanager.service.interfaces.GenreService;
-import com.epam.songmanager.service.dto_service.MappingArtistUtilsArtistsImpl;
 import com.epam.songmanager.service.interfaces.MappingUtilsArtists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.validation.Valid;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 public class ArtistController {

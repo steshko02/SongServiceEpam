@@ -1,12 +1,14 @@
 package com.epam.songmanager.service.impl;
 
+import com.epam.songmanager.config.properties.LocationProperties;
 import com.epam.songmanager.exceptions.StorageException;
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
-import com.epam.songmanager.model.file_entity.FileStorageEntity;
+import com.epam.songmanager.model.resource.FileStorageEntity;
+import com.epam.songmanager.model.resource.ResourceObj;
 import com.epam.songmanager.service.interfaces.StorageService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -18,23 +20,24 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
+@EnableConfigurationProperties(LocationProperties.class)
 @Service
 public class FileSystemStorageService implements StorageService<FileStorageEntity> {
 
     private final Path rootLocation ;
 
     @Autowired
-    public FileSystemStorageService(  @Qualifier("fileLocation")String rootLocation) {
-        this.rootLocation = Paths.get(rootLocation);
+    public FileSystemStorageService(  LocationProperties locationProperties) {
+        this.rootLocation = Paths.get(locationProperties.getLocation());
     }
 
-    public String store(InputStream stream) throws IOException, NoSuchAlgorithmException {
+    public String store(InputStream stream) throws IOException {
         if (stream == null) {
             throw new StorageException("Failed to store empty file.");
         }
@@ -50,18 +53,15 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
         return rootLocation.resolve(destinationFile);
     }
 
-    private void createFiles(InputStream stream, String path) throws IOException, NoSuchAlgorithmException {
+    private void createFiles(InputStream stream, String path) throws IOException {
         File file = new File(path);
         try ( stream; OutputStream os = new FileOutputStream(file)) {
             IOUtils.copy(stream, os);
         } catch (IOException e) {
             throw new IOException(e);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
-    //оптимизировать(сделал на скорую)
     @Override
     public List<String> loadAll() {
         try {
@@ -117,6 +117,11 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
     @Override
     public Resource getResource(String filename) throws FileNotFoundException {
         return new InputStreamResource( new FileInputStream(filename));
+    }
+
+    @Override
+    public boolean supports(Class<? extends ResourceObj> resource) {
+        return true;
     }
 
 }

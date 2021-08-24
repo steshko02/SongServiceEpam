@@ -3,20 +3,18 @@ package com.epam.songmanager.controllers;
 import com.epam.songmanager.exceptions.EntityNotFoundException;
 import com.epam.songmanager.model.entity.Song;
 import com.epam.songmanager.repository.SongRepository;
-import com.epam.songmanager.service.ServiceSwitcher;
-import com.epam.songmanager.service.interfaces.SongService;
 import com.epam.songmanager.service.impl.FileSystemStorageService;
 import com.epam.songmanager.service.impl.MinioService;
-import io.minio.errors.*;
+import com.epam.songmanager.service.impl.ServiceStorageSwitcher;
+import com.epam.songmanager.service.interfaces.SongService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SongController {
@@ -31,7 +29,7 @@ public class SongController {
     private FileSystemStorageService fileSystemStorageService;
 
     @Autowired
-    private ServiceSwitcher serviceSwitcher;
+    private ServiceStorageSwitcher serviceSwitcher;
 
   //много логики
     @SneakyThrows
@@ -41,7 +39,7 @@ public class SongController {
         Song song = songService.getById(songId);
         long length = song.getResource().getSize();
         InputStreamResource inputStreamResource = null;
-        inputStreamResource = (InputStreamResource) serviceSwitcher.getByStorageType(song.getResource().getType()).
+        inputStreamResource = (InputStreamResource) serviceSwitcher.getByType(song.getResource().getType()).
                 getResource(song.getResource().getPath());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentLength(length);

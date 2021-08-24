@@ -1,10 +1,9 @@
-package com.epam.songmanager.model.file_entity;
+package com.epam.songmanager.model.resource;
 
 import lombok.Data;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
 
 @Data
 public abstract class ResourceDecorator  implements ResourceObj {
@@ -32,10 +31,6 @@ public abstract class ResourceDecorator  implements ResourceObj {
         this.size = size;
     }
 
-//    @Override
-//    public void save(InputStream is) throws IOException, NoSuchAlgorithmException {
-//        delegate.save(is);
-//    }
 
     @Override
     public InputStream read() throws IOException {

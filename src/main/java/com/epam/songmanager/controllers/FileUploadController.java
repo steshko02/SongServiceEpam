@@ -3,7 +3,7 @@ package com.epam.songmanager.controllers;
 import com.epam.songmanager.exceptions.FileParseException;
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
 import com.epam.songmanager.facades.ObjInitializer;
-import com.epam.songmanager.model.file_entity.FileStorageEntity;
+import com.epam.songmanager.model.resource.FileStorageEntity;
 import com.epam.songmanager.service.interfaces.StorageService;
 import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,6 @@ public class FileUploadController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
-
 
      @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,

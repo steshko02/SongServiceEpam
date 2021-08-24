@@ -1,8 +1,10 @@
 package com.epam.songmanager.service.impl;
 
 import com.amazonaws.util.IOUtils;
+import com.epam.songmanager.config.properties.BucketProperties;
 import com.epam.songmanager.exceptions.StorageException;
-import com.epam.songmanager.model.file_entity.CloudStorageEntity;
+import com.epam.songmanager.model.resource.CloudStorageEntity;
+import com.epam.songmanager.model.resource.ResourceObj;
 import com.epam.songmanager.service.interfaces.StorageService;
 import io.minio.*;
 import io.minio.errors.*;
@@ -11,7 +13,7 @@ import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -28,19 +30,18 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@EnableConfigurationProperties(BucketProperties.class)
 public class MinioService implements StorageService<CloudStorageEntity> {
 
+    private final String bucketName ;
+
     @Autowired
-    @Qualifier("cloudLocation")
-    private  String  bucketName;
+    public MinioService( BucketProperties bucketProperties) {
+        this.bucketName =bucketProperties.getLocation();
+    }
 
     @Autowired
     private MinioClient minioClient;
-
-    public MinioService() {
-
-    }
-
 
     @Override
     public String store(InputStream entity) throws IOException, NoSuchAlgorithmException, ServerException, InsufficientDataException, InternalException, InvalidResponseException, InvalidKeyException, XmlParserException, ErrorResponseException {
@@ -126,5 +127,10 @@ public class MinioService implements StorageService<CloudStorageEntity> {
                         .build())) {
             return new InputStreamResource(new ByteArrayInputStream(stream.readAllBytes()));
         }
+    }
+
+
+    public boolean supports(Class<? extends ResourceObj> resource) {
+        return true;
     }
 }

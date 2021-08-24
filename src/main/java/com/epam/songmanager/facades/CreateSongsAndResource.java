@@ -4,14 +4,13 @@ import com.epam.songmanager.exceptions.CheckSumException;
 import com.epam.songmanager.jms.Producer;
 import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.model.entity.StorageType;
-import com.epam.songmanager.model.file_entity.ResourceDecorator;
+import com.epam.songmanager.model.resource.ResourceDecorator;
 import com.epam.songmanager.service.interfaces.ResourceService;
 import com.epam.songmanager.service.interfaces.StorageService;
 import com.epam.songmanager.utils.CheckSumImpl;
 import com.epam.songmanager.utils.UnzipUtils;
 import org.apache.commons.io.input.CountingInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +26,14 @@ import java.util.List;
 @Service
 @Scope("prototype")
 public class CreateSongsAndResource<T extends ResourceDecorator> implements ObjInitializer<T> {
-    @Autowired
-    @Qualifier("messageDigestType")
-    private  String messageDigest;
-    @Autowired
-    @Qualifier("fileExtension")
-    private  String fileExtension;
 
+
+    private  String messageDigest;
     private  StorageService<T> storageService;
 
-    public CreateSongsAndResource(StorageService<T> storageService) {
+    public CreateSongsAndResource(StorageService<T> storageService, String messageDigest) {
         this.storageService = storageService;
+        this.messageDigest = messageDigest;
     }
 
     @Autowired

@@ -1,7 +1,7 @@
 package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.facades.ObjInitializer;
-import com.epam.songmanager.model.file_entity.FileStorageEntity;
+import com.epam.songmanager.model.resource.FileStorageEntity;
 import com.epam.songmanager.service.interfaces.StorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

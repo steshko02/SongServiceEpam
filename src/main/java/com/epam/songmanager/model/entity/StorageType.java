@@ -1,7 +1,7 @@
 package com.epam.songmanager.model.entity;
 
-import com.epam.songmanager.model.file_entity.CloudStorageEntity;
-import com.epam.songmanager.model.file_entity.FileStorageEntity;
+import com.epam.songmanager.model.resource.CloudStorageEntity;
+import com.epam.songmanager.model.resource.FileStorageEntity;
 
 public enum StorageType {
     DISK_FILE_SYSTEM(FileStorageEntity.class.getName()),
