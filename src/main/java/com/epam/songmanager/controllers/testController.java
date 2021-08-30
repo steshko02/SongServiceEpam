@@ -15,58 +15,8 @@ import java.security.NoSuchAlgorithmException;
 @Controller
 public class testController {
 
-    @Autowired
-    private ResourceService resourceService;
-    @Autowired
-    private SongService songService;
-    @Autowired
-    private AlbumRepository albumRepository;
-
-    @Autowired
-    private SongRepository songRepository;
-
-
-
-    @GetMapping("/test")
-    public String  testRes() throws IOException, NoSuchAlgorithmException {
-        //resourceService.addResource("C:\\Users\\stesh\\OneDrive\\Рабочий стол\\dajte-tank-ya.mp3");
-
-        return "all is OK!";
-    }
-
-//    @GetMapping("/test2")
-//    public String  testSong() {
-//
-//        String name = "KISH";
-//        String notes = "dsfsdfs";
-//        Resource resource = resourceService.get(2L);
-//       // Album album = new Album(1L,"name",1234,"notes",null);
-//
-//        //albumRepository.save(album);
-//
-//        songService.addSong(songService.create(name,1231,notes,resource,albumRepository.getById(6L)));
-//
-//        return "all is OK!";
-//    }
-
-//    @RequestMapping(value = "test3/{songId}", method = RequestMethod.GET, produces = {
-//            MediaType.APPLICATION_OCTET_STREAM_VALUE })
-//    public ResponseEntity playAudio(@PathVariable("songId") Long songId) throws FileNotFoundException {
-//
-//        Song song = songRepository.getById(songId);
-//
-//        long length = song.getResource().getSize();
-//
-//        InputStreamResource inputStreamResource = new InputStreamResource( new FileInputStream(song.getResource().getPath()));
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.setContentLength(length);
-//        httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());
-//        return new ResponseEntity(inputStreamResource, httpHeaders, HttpStatus.OK);
-//    }
-
     @GetMapping("/test4")
     public String  testSong1() {
-
         return "audio";
     }
 }

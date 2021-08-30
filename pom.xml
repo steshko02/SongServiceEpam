@@ -87,7 +87,7 @@
 			<version>2.0.9</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
+
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk</artifactId>
@@ -140,10 +140,6 @@
 			<version>RELEASE</version>
 			<scope>compile</scope>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>com.jayway.jsonpath</groupId>-->
-<!--			<artifactId>json-path</artifactId>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -154,8 +150,12 @@
 			<artifactId>minio</artifactId>
 			<version>8.3.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
 
+		<dependency>
+			<groupId>com.jid</groupId>
+			<artifactId>jid3lib</artifactId>
+			<version>0.6.1</version>
+		</dependency>
 
 	</dependencies>
 

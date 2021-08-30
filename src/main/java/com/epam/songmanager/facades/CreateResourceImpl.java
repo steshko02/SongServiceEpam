@@ -26,7 +26,6 @@ import java.util.List;
 @Scope("prototype")
 public class CreateResourceImpl<T extends ResourceDecorator> implements CreateResource<T> {
 
-
     private  String messageDigest;
     private  StorageService<T> storageService;
 
