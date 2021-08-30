@@ -1,7 +1,6 @@
 package com.epam.songmanager.model.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 

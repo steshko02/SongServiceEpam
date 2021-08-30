@@ -1,6 +1,9 @@
 package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.model.entity.Genre;
+import com.epam.songmanager.repository.ArtistRepository;
+import com.epam.songmanager.repository.GenreRepository;
+import com.epam.songmanager.service.converters.DtoToArtistConverter;
 import com.epam.songmanager.service.interfaces.GenreService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -24,9 +27,15 @@ class GenreControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-
     @MockBean
     private GenreService genreService;
+
+    @MockBean
+    private ArtistRepository artistRepository;
+
+    @MockBean
+    private GenreRepository genreRepository;
+
     @Test
     public void givenAlbum_whenAdd_thenStatus201andReturnID() throws Exception {
         Genre genre = new Genre(1L,"POP");

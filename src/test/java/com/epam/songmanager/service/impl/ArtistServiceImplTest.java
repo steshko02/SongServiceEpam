@@ -31,16 +31,16 @@ class ArtistServiceImplTest {
     void edit() {
         Artist artist = new Artist(1L,"name", "notes");
         Artist newArtist = new Artist(1L,"name1", "notes1");
-        Mockito.when(artistRepository.getById(artist.getId())).thenReturn(artist);
+        Mockito.when(artistRepository.findById(1L)).thenReturn(java.util.Optional.of(artist));
         assertEquals(artistService.edit(newArtist,1L),newArtist.getId());
     }
 
     @Test
     void get() {
         Artist artist = new Artist(1L,"name", "notes");
-        Mockito.when(artistRepository.getById(1L)).thenReturn(artist);
+        Mockito.when(artistRepository.findById(1L)).thenReturn(java.util.Optional.of(artist));
         Artist fromMockRepos = artistService.get(1L);
-        Mockito.verify(artistRepository,Mockito.times(1)).getById(1L);
+        Mockito.verify(artistRepository,Mockito.times(1)).findById(1L);
         assertEquals(artist,fromMockRepos);
     }
 

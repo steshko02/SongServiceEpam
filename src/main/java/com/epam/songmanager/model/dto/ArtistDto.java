@@ -3,6 +3,7 @@ package com.epam.songmanager.model.dto;
 import lombok.Data;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -14,7 +15,6 @@ public class ArtistDto {
     private  String notes;
 
     Set<Long> genres = new HashSet<>();
-
 
     public ArtistDto() {
     }
@@ -30,5 +30,18 @@ public class ArtistDto {
         this.name = name;
         this.notes = notes;
         this.genres = genres;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArtistDto artistDto = (ArtistDto) o;
+        return Objects.equals(id, artistDto.id) && Objects.equals(name, artistDto.name) && Objects.equals(notes, artistDto.notes) && Objects.equals(genres, artistDto.genres);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, notes, genres);
     }
 }

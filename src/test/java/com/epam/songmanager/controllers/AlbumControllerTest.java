@@ -2,6 +2,9 @@ package com.epam.songmanager.controllers;
 
 import com.epam.songmanager.model.entity.Album;
 import com.epam.songmanager.model.dto.AlbumDto;
+import com.epam.songmanager.repository.GenreRepository;
+import com.epam.songmanager.service.converters.AlbumToDtoConverter;
+import com.epam.songmanager.service.converters.DtoToAlbumConvert;
 import com.epam.songmanager.service.interfaces.AlbumService;
 import com.epam.songmanager.service.interfaces.MappingUtilsAlbums;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AlbumController.class)
 public class AlbumControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -25,7 +29,12 @@ public class AlbumControllerTest {
     @MockBean
     private AlbumService albumService;
     @MockBean
-    private MappingUtilsAlbums mappingUtilsAlbums;
+    private AlbumToDtoConverter albumToDtoConverter;
+    @MockBean
+    private DtoToAlbumConvert dtoToAlbumConvert;
+    @MockBean
+    private GenreRepository genreRepository;
+
     @Test
     public void givenAlbum_whenAdd_thenStatus201andReturnID() throws Exception {
 
@@ -60,7 +69,7 @@ public class AlbumControllerTest {
         AlbumDto albumDto = new AlbumDto(1L,"TEST",1999,"Some text");
 
         Mockito.when(albumService.get(1L)).thenReturn(album1);
-        Mockito.when(mappingUtilsAlbums.mapToDto(album1)).thenReturn(albumDto);
+        Mockito.when(albumToDtoConverter.convert(album1)).thenReturn(albumDto);
         mockMvc.perform(
                 get("/albums/1")
         )
@@ -75,7 +84,7 @@ public class AlbumControllerTest {
         Album album2 = new Album(2L,"TEST",1999,"Some text");
 
         Mockito.when(albumService.edit(album1,2L)).thenReturn(album2.getId());
-        Mockito.when(mappingUtilsAlbums.mapToEntity(albumDto)).thenReturn(album1);
+        Mockito.when(dtoToAlbumConvert.convert(albumDto)).thenReturn(album1);
         mockMvc.perform(
                 put("/albums/2")
                         .content(objectMapper.writeValueAsString(albumDto))

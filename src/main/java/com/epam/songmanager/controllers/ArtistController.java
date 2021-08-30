@@ -21,9 +21,6 @@ public class ArtistController {
     private ArtistService artistService;
 
     @Autowired
-    private GenreService genreService;
-
-    @Autowired
     private ConversionService conversionService;
 
     @PostMapping("/artists")

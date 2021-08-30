@@ -1,12 +1,11 @@
 package com.epam.songmanager.model.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Setter
@@ -65,5 +64,19 @@ public class Album {
         this.notes = notes;
         this.artists = artists;
         this.genres = genres;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Album album = (Album) o;
+        return year == album.year && Objects.equals(id, album.id) && Objects.equals(name, album.name) && Objects.equals(notes, album.notes) && Objects.equals(artists, album.artists) && Objects.equals(genres, album.genres);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, year, notes, artists, genres);
     }
 }

@@ -50,7 +50,7 @@ public class MinioService implements StorageService<CloudStorageEntity> {
     @Override
     public String store(InputStream is) throws IOException, NoSuchAlgorithmException, ServerException, InsufficientDataException, InternalException, InvalidResponseException, InvalidKeyException, XmlParserException, ErrorResponseException {
 
-        if (is == null) {
+        if (is.available()==0) {
             throw new StorageException("Failed to store empty file.");
         }
         String  filename = createFileName();

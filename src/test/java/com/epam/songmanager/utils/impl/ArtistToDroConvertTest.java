@@ -4,6 +4,7 @@ import com.epam.songmanager.model.dto.ArtistDto;
 import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.repository.GenreRepository;
+import com.epam.songmanager.service.converters.ArtistToDtoConverter;
 import com.epam.songmanager.service.converters.DtoToArtistConverter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,13 +16,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 class ArtistToDroConvertTest {
 
     @MockBean
     private GenreRepository genreRepository;
     @Autowired
-    private DtoToArtistConverter mappingArtistUtilsArtists;
+    private DtoToArtistConverter dtoToArtistConverter;
+    @Autowired
+    private ArtistToDtoConverter artistToDtoConvert;
 
     static Artist artist;
     static ArtistDto artistDto;
@@ -43,16 +48,16 @@ class ArtistToDroConvertTest {
         artistDto = new ArtistDto(1L,"name1", "notes",genresId);
     }
 
-//    @Test
-//    void mapToDto() {
-//        assertEquals(mappingArtistUtilsArtists.mapToDto(artist),artistDto);
-//    }
-//
-//    @Test
-//    void mapToEntity() {
-//
-//        Mockito.when(genreRepository.getById(2L)).thenReturn(new Genre(2L,"genre2"));
-//        Mockito.when(genreRepository.getById(1L)).thenReturn(new Genre(1L,"genre1"));
-//        assertEquals(mappingArtistUtilsArtists.mapToEntity(artistDto),artist);
-//    }
+    @Test
+    void mapToDto() {
+        assertEquals(artistToDtoConvert.convert(artist),artistDto);
+    }
+
+    @Test
+    void mapToEntity() {
+
+        Mockito.when(genreRepository.getById(2L)).thenReturn(new Genre(2L,"genre2"));
+        Mockito.when(genreRepository.getById(1L)).thenReturn(new Genre(1L,"genre1"));
+        assertEquals(dtoToArtistConverter.convert(artistDto),artist);
+    }
 }

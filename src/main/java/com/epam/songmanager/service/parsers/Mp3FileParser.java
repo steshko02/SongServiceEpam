@@ -14,19 +14,18 @@ import java.io.IOException;
 @Data
 public class Mp3FileParser implements AudioParser {
 
-    private  AbstractID3v2 tags;
 
-    public void create(File file) throws IOException, TagException, FileParseException {
+    private AbstractID3v2 create(File file) throws IOException, TagException, FileParseException {
         MP3File mp3File  = new MP3File(file);
         if(mp3File.hasID3v2Tag()) {
-            tags= mp3File.getID3v2Tag();
+         return mp3File.getID3v2Tag();
         }
         else throw new FileParseException(Mp3FileParser.class);
     }
 
     @Override
-    public String getName() throws FileParseException {
-        String name =  tags.getSongTitle();
+    public String getName(File file) throws FileParseException, TagException, IOException {
+        String name = create(file).getSongTitle();
         if(name == null|| name.isEmpty()){
             throw new FileParseException(Mp3FileParser.class);
         }
@@ -34,8 +33,8 @@ public class Mp3FileParser implements AudioParser {
     }
 
     @Override
-    public String getAlbum() throws FileParseException {
-        String album = tags.getAlbumTitle();
+    public String getAlbum(File file) throws FileParseException, TagException, IOException {
+        String album = create(file).getAlbumTitle();
         if(album == null || album.isEmpty()){
             throw new FileParseException(Mp3FileParser.class);
         }
@@ -43,8 +42,8 @@ public class Mp3FileParser implements AudioParser {
     }
 
     @Override
-    public int getYear() throws FileParseException {
-        String year = tags.getYearReleased();
+    public int getYear(File file) throws FileParseException, TagException, IOException {
+        String year = create(file).getYearReleased();
         if(year == null || year.isEmpty()){
             throw new FileParseException(Mp3FileParser.class);
         }
@@ -52,8 +51,8 @@ public class Mp3FileParser implements AudioParser {
     }
 
     @Override
-    public String getNotes() throws FileParseException {
-        String notes = tags.getSongComment();
+    public String getNotes(File file) throws FileParseException, TagException, IOException {
+        String notes = create(file).getSongComment();
         if(notes == null|| notes.isEmpty()){
             throw new FileParseException(Mp3FileParser.class);
         }

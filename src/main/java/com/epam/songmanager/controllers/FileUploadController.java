@@ -3,10 +3,16 @@ package com.epam.songmanager.controllers;
 import com.epam.songmanager.exceptions.FileParseException;
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
 import com.epam.songmanager.facades.CreateResource;
+import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.model.resource.FileStorageEntity;
 import com.epam.songmanager.repository.ResourceRepository;
+import com.epam.songmanager.service.impl.ServiceStorageSwitcher;
+import com.epam.songmanager.service.interfaces.CreateFileSwitcher;
 import com.epam.songmanager.service.interfaces.StorageService;
+import com.epam.songmanager.service.interfaces.StorageSwitcher;
 import io.minio.errors.*;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -24,45 +30,49 @@ import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
 public class FileUploadController {
 
     @Autowired
-    private  StorageService <FileStorageEntity> storageService;
-
+    private StorageSwitcher serviceStorageSwitcher;
     @Autowired
-    private CreateResource<FileStorageEntity> createResource;
-
-    @Autowired
-    private ResourceRepository resourceRepository;
+    private CreateFileSwitcher createFilesSwitcher;
 
     @GetMapping("/")
-    public String listUploadedFiles(Model model) throws IOException {
+    public String listUploadedFiles(@NotNull Model model, @RequestParam(required=false,name ="st") StorageType storageType)  {
 
-        model.addAttribute("files", storageService.loadAll().stream().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-                        "serveFile", path).build().toUri().toString())
-                .collect(Collectors.toList()));
+        if(storageType == null)
+            storageType = StorageType.DISK_FILE_SYSTEM;
+
+        model.addAttribute("storage", storageType);
+        model.addAttribute("files", serviceStorageSwitcher.getByType(storageType).loadAll());
         return "uploadForm";
     }
 
-    @GetMapping("/files/{filename}")
+    @GetMapping("/{filename}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws IOException, InvalidResponseException, InvalidKeyException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, InsufficientDataException, ErrorResponseException {
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename,
+                                              @RequestParam("st") StorageType storageType) throws IOException, InvalidResponseException, InvalidKeyException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, InsufficientDataException, ErrorResponseException {
 
-        Resource file = storageService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        Resource file = serviceStorageSwitcher.getByType(storageType).loadAsResource(filename);
+        return ResponseEntity
+                .ok()
+                .contentLength(file.contentLength())
+                .header("Content-type", "application/octet-stream")
+                .header("Content-disposition", "attachment; filename=\"" + filename + "\"")
+                .body(file);
     }
 
      @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) throws Exception, FileParseException {
+                                   @RequestParam("st") StorageType storageType,
+                                   RedirectAttributes redirectAttributes) throws Exception {
 
-      createResource.createFiles(file.getInputStream(),file.getOriginalFilename());
+         createFilesSwitcher.getByType(storageType).createFiles(file.getInputStream(),file.getOriginalFilename());
 
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
-        return "redirect:/";
+        return "redirect:/?st="+storageType.toString();
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)

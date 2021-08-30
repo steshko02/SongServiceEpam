@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @EnableConfigurationProperties(LocationProperties.class)
@@ -41,12 +42,14 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
     }
 
     public String store(InputStream stream) throws IOException {
-        if (stream == null) {
+        if (stream.available()==0) {
             throw new StorageException("Failed to store empty file.");
         }
+        else{
         Path path =createFilepath();
         createFiles(stream,path.toString());
         return  path.toString();
+        }
     }
 
     private Path createFilepath(){
@@ -80,7 +83,6 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
         catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
-
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.epam.songmanager.model.entity.Genre;
 import com.epam.songmanager.repository.ArtistRepository;
 import com.epam.songmanager.repository.GenreRepository;
 import com.epam.songmanager.service.converters.AlbumToDtoConverter;
+import com.epam.songmanager.service.converters.DtoToAlbumConvert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -30,7 +31,9 @@ class AlbumToDtoConverterTest {
     private GenreRepository genreRepository;
 
     @Autowired
-    private AlbumToDtoConverter mappingAlbumUtils;
+    private AlbumToDtoConverter albumToDtoConverter;
+    @Autowired
+    private DtoToAlbumConvert dtoToAlbumConvert;
 
      static  Set<Genre>  genres = new HashSet<>();
       static  Set<Long> genresId = new HashSet<>();
@@ -58,18 +61,18 @@ class AlbumToDtoConverterTest {
         album = new Album(1L,"name",2000, "notes",artists,genres);
         albumDto = new AlbumDto(1L,"name",2000, "notes",genresId,artistsId);
     }
-//
-//    @Test
-//    void mapToDto() {
-//        assertEquals(mappingAlbumUtils.mapToDto(album),albumDto);
-//    }
-//
-//    @Test
-//    void mapToEntity() {
-//        Mockito.when(artistRepository.getById(1L)).thenReturn(new Artist(1L,"name1", "notes"));
-//        Mockito.when(artistRepository.getById(2L)).thenReturn(new Artist(2L,"name2", "notes"));
-//        Mockito.when(genreRepository.getById(1L)).thenReturn(new Genre(1L,"genre1"));
-//        Mockito.when(genreRepository.getById(2L)).thenReturn(new Genre(2L,"genre2"));
-//        assertEquals(mappingAlbumUtils.mapToEntity(albumDto),album);
-//    }
+
+    @Test
+    void mapToDto() {
+        assertEquals(albumToDtoConverter.convert(album),albumDto);
+    }
+
+    @Test
+    void mapToEntity() {
+        Mockito.when(artistRepository.getById(1L)).thenReturn(new Artist(1L,"name1", "notes"));
+        Mockito.when(artistRepository.getById(2L)).thenReturn(new Artist(2L,"name2", "notes"));
+        Mockito.when(genreRepository.getById(1L)).thenReturn(new Genre(1L,"genre1"));
+        Mockito.when(genreRepository.getById(2L)).thenReturn(new Genre(2L,"genre2"));
+        assertEquals(dtoToAlbumConvert.convert(albumDto),album);
+    }
 }
