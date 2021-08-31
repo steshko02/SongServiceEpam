@@ -24,12 +24,10 @@ public class Album {
 
     private  String notes;
 
-
     @ManyToMany
     @JoinTable(name="arist_album", joinColumns=@JoinColumn(name="album_id"),
             inverseJoinColumns=@JoinColumn(name="artist_id"))
     private Set<Artist> artists = new HashSet<>();
-
 
     @ManyToMany
     @JoinTable(name="genre_album", joinColumns=@JoinColumn(name="album_id"),

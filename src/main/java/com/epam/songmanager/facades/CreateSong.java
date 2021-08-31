@@ -10,6 +10,7 @@ import com.epam.songmanager.service.interfaces.ResourceService;
 import com.epam.songmanager.service.interfaces.SongService;
 import com.epam.songmanager.service.interfaces.StorageSwitcher;
 import com.epam.songmanager.service.parsers.AudioParser;
+import io.minio.errors.*;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import org.farng.mp3.TagException;
@@ -24,6 +25,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @Service
 @Transactional
@@ -56,8 +59,7 @@ public class CreateSong {
 
     @JmsListener(destination = "resources")
     @SendTo("zip")
-    public String init(String message)  {
-        try {
+    public String init(String message) throws Exception {
             Resource resource = resourceService.get(Long.valueOf(message));
             InputStream is = serviceStorageSwitcher.getByType(resource.getType()).
                     loadAsResource(resource.getPath()).getInputStream();
@@ -65,10 +67,6 @@ public class CreateSong {
             createSong(resource, createTmpFileForParse(is));
 
             return "Resource " + message+ " parsed";
-        } catch ( Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 
