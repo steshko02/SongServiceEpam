@@ -56,7 +56,6 @@ public class CreateSong {
         this.fileExtension = fileProperties.getFileExtension();
     }
 
-
     @JmsListener(destination = "resources")
     @SendTo("zip")
     public String init(String message) throws Exception {

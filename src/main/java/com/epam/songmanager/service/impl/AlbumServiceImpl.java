@@ -55,15 +55,6 @@ public class AlbumServiceImpl implements AlbumService {
         return true;
     }
 
-    private boolean checkExistArtists(Set<Artist> artists){
-        for (Artist a: artists) {
-            if(!artistRepository.existsById(a.getId()))
-                return false;
-        }
-        return true;
-    }
-
-
     @Override
     public Album get(Long id) {
         Album album = albumRepository.findById(id).orElse(null);
