@@ -45,7 +45,7 @@ class FileSystemStorageServiceTest {
     @Test
      void storeIsNullStream() throws StorageException{
         Throwable thrown = assertThrows(StorageException.class, () -> {
-            fileSystemStorageService.store(null);
+            fileSystemStorageService.store(new ByteArrayInputStream(new byte[0]));
         });
     }
 
