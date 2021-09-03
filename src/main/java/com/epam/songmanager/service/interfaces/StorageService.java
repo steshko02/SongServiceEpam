@@ -31,4 +31,11 @@ public interface StorageService<T extends ResourceDecorator> {
     Resource getResource(String filename) throws IOException, InvalidResponseException, InvalidKeyException, NoSuchAlgorithmException, ServerException, InternalException, XmlParserException, InsufficientDataException, ErrorResponseException;
 
     boolean supports(StorageType storageType);
+
+    boolean supports(Class<? extends ResourceObj> clazz);
+
+    Class<? extends ResourceObj> getSupportsClass();
+
+    InputStream read(ResourceObj resourceObj);
+
 }
