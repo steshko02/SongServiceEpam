@@ -19,7 +19,4 @@ public class S3Config {
                         .build();
         return minioClient;
     }
-
-    public S3Config() {
-    }
 }

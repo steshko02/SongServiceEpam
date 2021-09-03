@@ -24,12 +24,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Scope("prototype")
-public class CreateResourceImpl<T extends ResourceDecorator> implements CreateResource<T> {
+public class CreateResourceService<T extends ResourceDecorator> implements CreateResource<T> {
 
     private  String messageDigest;
     private  StorageService<T> storageService;
 
-    public CreateResourceImpl(StorageService<T> storageService, String messageDigest) {
+    public CreateResourceService(StorageService<T> storageService, String messageDigest) {
         this.storageService = storageService;
         this.messageDigest = messageDigest;
     }
@@ -40,7 +40,7 @@ public class CreateResourceImpl<T extends ResourceDecorator> implements CreateRe
     @Autowired
     private  Producer producer;
 
-    public CreateResourceImpl() {
+    public CreateResourceService() {
     }
 
     private void initResource(T entity)  {

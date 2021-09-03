@@ -14,7 +14,6 @@ import java.io.IOException;
 @Data
 public class Mp3FileParser implements AudioParser {
 
-
     private AbstractID3v2 create(File file) throws IOException, TagException, FileParseException {
         MP3File mp3File  = new MP3File(file);
         if(mp3File.hasID3v2Tag()) {
@@ -53,7 +52,7 @@ public class Mp3FileParser implements AudioParser {
     @Override
     public String getNotes(File file) throws FileParseException, TagException, IOException {
         String notes = create(file).getSongComment();
-        if(notes == null|| notes.isEmpty()){
+        if(notes == null || notes.isEmpty()){
             throw new FileParseException(Mp3FileParser.class);
         }
         return notes;
