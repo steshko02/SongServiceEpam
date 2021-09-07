@@ -9,6 +9,7 @@ import com.epam.songmanager.service.interfaces.ResourceService;
 import com.epam.songmanager.service.interfaces.StorageService;
 import com.epam.songmanager.utils.CheckSumImpl;
 import com.epam.songmanager.utils.UnzipUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.CountingInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -54,12 +55,15 @@ public class CreateResourceService<T extends ResourceDecorator> implements Creat
     @Override
     public void createFiles(InputStream stream,String filename) throws IOException, NoSuchAlgorithmException {
         if(UnzipUtils.isZip(filename)){
-            List<ByteArrayInputStream> arrayOutputStreams =  UnzipUtils.getInputStreams((FileInputStream) stream);
-            for (ByteArrayInputStream arrayOutputStream : arrayOutputStreams) {
-                createTmpAndMainFile(arrayOutputStream);
-            }
+            UnzipUtils.unzip((FileInputStream) stream,x-> {
+                try {
+                    tryCreateTmpAndMainFile(new ByteArrayInputStream(x.toByteArray()));
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+            });
         }
-        else createTmpAndMainFile(stream);
+        else tryCreateTmpAndMainFile(stream);
     }
 
     @Override
@@ -67,7 +71,8 @@ public class CreateResourceService<T extends ResourceDecorator> implements Creat
         return storageService.supports(storageType);
     }
 
-    private void  createTmpAndMainFile(InputStream stream) throws NoSuchAlgorithmException{
+    private void  tryCreateTmpAndMainFile(InputStream stream) throws NoSuchAlgorithmException{
+
 
         MessageDigest md = MessageDigest.getInstance(messageDigest);
 

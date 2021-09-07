@@ -4,8 +4,8 @@ import lombok.experimental.UtilityClass;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -16,64 +16,37 @@ public class UnzipUtils {
     private final static String ZIP_EXTENSION = ".zip";
     private final static String MP3_EXTENSION = ".mp3";
 
-    public static  List<ByteArrayInputStream> getInputStreams(FileInputStream inputStream) throws IOException {
 
-       BufferedInputStream bis = new BufferedInputStream(inputStream);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                BufferedOutputStream bos = new BufferedOutputStream(baos);
-
-        byte[] buffer = new byte[BUFFER_SIZE];
-        while (bis.read(buffer, 0, BUFFER_SIZE) != -1) {
-            bos.write(buffer);
-        }
-        bos.flush();
-        bos.close();
-        bis.close();
-
-        List<ByteArrayInputStream > is= new ArrayList<>();
-        unzip(baos).forEach(b->is.add(new ByteArrayInputStream(b.toByteArray())));
-
-        return is;
-
-    }
-
-    public static boolean isZip(String filename){
+    public static boolean isZip(String filename) {
         return filename.matches(".*\\.zip(:|$).*");
     }
 
-    public static List<ByteArrayOutputStream> unzip(ByteArrayOutputStream zippedFileOS) {
-        try{
-
+    public static void unzip(InputStream zipInputStream, Consumer<ByteArrayOutputStream> callback) {
+        try {
             ZipInputStream inputStream = new ZipInputStream(
-                new BufferedInputStream(new ByteArrayInputStream(
-                        zippedFileOS.toByteArray())),StandardCharsets.ISO_8859_1);
-
+                    new BufferedInputStream(new ByteArrayInputStream(
+                            zipInputStream.readAllBytes())), StandardCharsets.ISO_8859_1);
             ZipEntry entry;
-
-            List<ByteArrayOutputStream> result = new ArrayList<>();
             while ((entry = inputStream.getNextEntry()) != null) {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 int count;
                 byte[] data = new byte[BUFFER_SIZE];
-             //   if (!entry.isDirectory() && entry.getName().matches("(.+)(\\.mp3)$")) {
-                if (!entry.isDirectory()) {
+                   if (!entry.isDirectory() && (entry.getName().toLowerCase().endsWith(MP3_EXTENSION))
+                           || entry.getName().toLowerCase().endsWith(ZIP_EXTENSION)) {
+                       if (!entry.isDirectory()) {
+                           BufferedOutputStream out = new BufferedOutputStream(
+                                   outputStream, BUFFER_SIZE);
+                           while ((count = inputStream.read(data, 0, BUFFER_SIZE)) != -1) {
+                               out.write(data, 0, count);
+                           }
+                               callback.accept(outputStream);
+                           out.flush();
+                           out.close();
+                       }
+                   }
 
-                    BufferedOutputStream out = new BufferedOutputStream(
-                            outputStream, BUFFER_SIZE);
-                    while ((count = inputStream.read(data, 0, BUFFER_SIZE)) != -1) {
-                        out.write(data, 0, count);
-                    }
-                    out.flush();
-                    out.close();
-                    if (entry.getName().toLowerCase().endsWith(ZIP_EXTENSION)) {
-                        result.addAll(unzip(outputStream));
-                    } else {
-                        result.add(outputStream);
-                    }
-                }
             }
             inputStream.close();
-            return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
