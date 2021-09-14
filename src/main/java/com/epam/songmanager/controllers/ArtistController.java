@@ -4,8 +4,6 @@ import com.epam.songmanager.exceptions.EntityNotFoundException;
 import com.epam.songmanager.model.dto.ArtistDto;
 import com.epam.songmanager.model.entity.Artist;
 import com.epam.songmanager.service.interfaces.ArtistService;
-import com.epam.songmanager.service.interfaces.GenreService;
-import com.epam.songmanager.service.interfaces.MappingUtilsArtists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
