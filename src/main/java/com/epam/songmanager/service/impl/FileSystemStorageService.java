@@ -5,6 +5,7 @@ import com.epam.songmanager.exceptions.StorageException;
 import com.epam.songmanager.exceptions.StorageFileNotFoundException;
 import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.model.resource.FileStorageEntity;
+import com.epam.songmanager.model.resource.ResourceObj;
 import com.epam.songmanager.service.interfaces.StorageService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +117,8 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
 
     @Override
     public FileStorageEntity create(String cs, String path, long size) {
-        return new FileStorageEntity(path, size,cs);
+//        return new FileStorageEntity(path, size,cs);
+        return null;
     }
 
     @Override
@@ -124,9 +126,21 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
         return new ByteArrayResource( new FileInputStream(filename).readAllBytes());
     }
 
+
     @Override
     public boolean supports(StorageType resource) {
         return resource.equals(storageType);
     }
 
+    @Override
+    public boolean supports(Class<? extends ResourceObj> clazz) {
+        if(clazz.equals(FileStorageEntity.class))
+            return true ;
+        return false;
+    }
+
+    @Override
+    public Class<? extends ResourceObj> getSupportsClass() {
+        return FileStorageEntity.class;
+    }
 }

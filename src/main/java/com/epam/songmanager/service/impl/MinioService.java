@@ -5,6 +5,7 @@ import com.epam.songmanager.config.properties.BucketProperties;
 import com.epam.songmanager.exceptions.StorageException;
 import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.model.resource.CloudStorageEntity;
+import com.epam.songmanager.model.resource.FileStorageEntity;
 import com.epam.songmanager.model.resource.ResourceDecorator;
 import com.epam.songmanager.model.resource.ResourceObj;
 import com.epam.songmanager.service.interfaces.StorageService;
@@ -119,7 +120,8 @@ public class MinioService implements StorageService<CloudStorageEntity> {
 
     @Override
     public CloudStorageEntity create(String cs, String path, long size) {
-        return new CloudStorageEntity(path,size,cs);
+      //  return new CloudStorageEntity(path,size,cs);
+        return null;
     }
 
     @Override
@@ -136,5 +138,17 @@ public class MinioService implements StorageService<CloudStorageEntity> {
 
     public boolean supports(StorageType resource) {
         return resource.equals(storageType);
+    }
+
+    @Override
+    public boolean supports(Class<? extends ResourceObj> clazz) {
+        if(clazz.equals(CloudStorageEntity.class))
+            return true ;
+        return false;
+    }
+
+    @Override
+    public Class<? extends ResourceObj> getSupportsClass() {
+        return CloudStorageEntity.class;
     }
 }

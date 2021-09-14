@@ -1,14 +1,21 @@
 package com.epam.songmanager.model.resource;
+import com.epam.songmanager.model.entity.StorageType;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 
+@Document
 public class FileStorageEntity extends ResourceDecorator {
 
 
-    public FileStorageEntity(String path, long size, String checksum) {
-        super(path, size, checksum);
+    public FileStorageEntity() {
+        super();
+    }
+
+    public FileStorageEntity(StorageType cloudSystem) {
+        super(cloudSystem);
     }
 
     @Override
@@ -18,6 +25,10 @@ public class FileStorageEntity extends ResourceDecorator {
         } catch (IOException e) {
             throw new IOException("Exception occurred while decompressing input stream. ", e);
         }
+    }
+    @Override
+    public void save(InputStream stream) throws IOException {
+        super.save(stream);
     }
 
 }

@@ -10,9 +10,7 @@ import com.epam.songmanager.service.interfaces.ResourceService;
 import com.epam.songmanager.service.interfaces.SongService;
 import com.epam.songmanager.service.interfaces.StorageSwitcher;
 import com.epam.songmanager.service.parsers.AudioParser;
-import io.minio.errors.*;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-
 import org.farng.mp3.TagException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,8 +23,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
 @Service
 @Transactional

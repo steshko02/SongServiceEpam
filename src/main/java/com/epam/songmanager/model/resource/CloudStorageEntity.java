@@ -1,11 +1,23 @@
 package com.epam.songmanager.model.resource;
 
 
+import com.epam.songmanager.model.entity.StorageType;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.IOException;
 import java.io.InputStream;
 
-
+@Document
 public class CloudStorageEntity extends ResourceDecorator {
+
+
+    public CloudStorageEntity() {
+
+    }
+
+    public CloudStorageEntity(StorageType cloudSystem) {
+        super(cloudSystem);
+    }
 
     @Override
     public InputStream read() throws IOException {
@@ -16,8 +28,9 @@ public class CloudStorageEntity extends ResourceDecorator {
         }
     }
 
-    public CloudStorageEntity(String path, long size, String checkSum) {
-        super(path, size, checkSum);
+    @Override
+    public void save(InputStream stream) throws IOException {
+        super.save(stream);
     }
 }
 

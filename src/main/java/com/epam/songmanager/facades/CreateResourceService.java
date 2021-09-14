@@ -5,6 +5,7 @@ import com.epam.songmanager.jms.Producer;
 import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.model.resource.ResourceDecorator;
+import com.epam.songmanager.model.resource.ResourceObj;
 import com.epam.songmanager.service.interfaces.ResourceService;
 import com.epam.songmanager.service.interfaces.StorageService;
 import com.epam.songmanager.utils.CheckSumImpl;
@@ -44,26 +45,29 @@ public class CreateResourceService<T extends ResourceDecorator> implements Creat
     public CreateResourceService() {
     }
 
-    private void initResource(T entity)  {
-        Resource resource =  new Resource( entity.getPath(),entity.getSize(),entity.getCheckSum(),
-                StorageType.getTypeByClass(entity.getClass().getName()));
+    private void initResource(ResourceObj resourceObj,String path, Long size, String checkSum)  {
+        Resource resource =  new Resource( path,size,checkSum,
+                StorageType.getTypeByClass(resourceObj.getClass().getName()));
 
         resourceService.addResource(resource);
         producer.sendMessage(resource.getId().toString());
     }
 
     @Override
-    public void createFiles(InputStream stream,String filename) throws IOException, NoSuchAlgorithmException {
-        if(UnzipUtils.isZip(filename)){
-            UnzipUtils.unzip((FileInputStream) stream,x-> {
-                try {
-                    tryCreateTmpAndMainFile(new ByteArrayInputStream(x.toByteArray()));
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
-            });
+    public void createFiles(ResourceObj stream, String filename) throws IOException, NoSuchAlgorithmException {
+        try(InputStream stream1 = stream.read()) {
+            if(UnzipUtils.isZip(filename)){
+                UnzipUtils.unzip((FileInputStream) stream1,x-> {
+                    try {
+                        stream.save(new ByteArrayInputStream(x.toByteArray()));
+                        tryCreateTmpAndMainFile(stream);
+                    } catch (NoSuchAlgorithmException | IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+            else tryCreateTmpAndMainFile(stream);
         }
-        else tryCreateTmpAndMainFile(stream);
     }
 
     @Override
@@ -71,17 +75,19 @@ public class CreateResourceService<T extends ResourceDecorator> implements Creat
         return storageService.supports(storageType);
     }
 
-    private void  tryCreateTmpAndMainFile(InputStream stream) throws NoSuchAlgorithmException{
+    private void  tryCreateTmpAndMainFile(ResourceObj resourceObj) throws NoSuchAlgorithmException{
+
 
 
         MessageDigest md = MessageDigest.getInstance(messageDigest);
 
-        try (CountingInputStream is =new CountingInputStream(new DigestInputStream(stream,md))){
+        try (   InputStream inputStream = resourceObj.read();
+                CountingInputStream is =new CountingInputStream(new DigestInputStream(inputStream,md))){
 
             String path = storageService.store(is);
             String checkSumRes = CheckSumImpl.create(md);
             if(!resourceService.ifExistsByCheckSum(checkSumRes)){
-                initResource(storageService.create(checkSumRes,path, is.getByteCount()));
+                initResource(resourceObj,path,is.getByteCount(), checkSumRes);
             }
             else {
                 throw  new CheckSumException("there is this song...");
