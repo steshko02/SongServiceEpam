@@ -1,9 +1,9 @@
 package com.epam.songmanager.utils;
 
 import lombok.experimental.UtilityClass;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -15,10 +15,27 @@ public class UnzipUtils {
     private final static String ZIP_EXTENSION = ".zip";
     private final static String MP3_EXTENSION = ".mp3";
 
-
-    public static boolean isZip(String filename) {
-        return filename.matches(".*\\.zip(:|$).*");
-    }
+    public static boolean isZip(BufferedInputStream is) {
+        is.mark(4);
+            byte[] b = new byte[4];
+            byte[] zipSig = new byte[4];
+            zipSig[0] = 0x50;
+            zipSig[1] = 0x4b;
+            zipSig[2] = 0x03;
+            zipSig[3] = 0x04;
+            try {
+                is.read(b, 0, 4);
+            } catch (Exception ex) {
+                throw new RuntimeException("Couldn't read header from stream ",
+                        ex);
+            }
+            try {
+                is.reset();
+            } catch (Exception ex) {
+                throw new RuntimeException("Couldn't reset stream ", ex);
+            }
+            return Arrays.equals(b, zipSig);
+        }
 
     public static void unzip(InputStream zipInputStream, Consumer<ByteArrayOutputStream> callback) {
         try {

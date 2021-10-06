@@ -1,4 +1,4 @@
-package com.epam.songmanager.repository.converter;
+package com.epam.songmanager.service.converters;
 
 import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.model.resource.CloudStorageEntity;
@@ -15,8 +15,8 @@ public class MapJsonToResourceObj implements Converter<DBObject, ResourceObj> {
     public ResourceObj convert(DBObject source) {
         StorageType storageType = (StorageType) source.get("storageType");
         switch (storageType){
-            case CLOUD_SYSTEM: return new CloudStorageEntity(StorageType.CLOUD_SYSTEM);
-            case DISK_FILE_SYSTEM: return new FileStorageEntity(StorageType.DISK_FILE_SYSTEM);
+            case CLOUD_SYSTEM: return new CloudStorageEntity();
+            case DISK_FILE_SYSTEM: return new FileStorageEntity();
             default: return null;
         }
     }

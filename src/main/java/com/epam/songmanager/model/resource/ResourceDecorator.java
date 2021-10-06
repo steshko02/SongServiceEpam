@@ -1,23 +1,25 @@
 package com.epam.songmanager.model.resource;
 
 import com.epam.songmanager.model.entity.StorageType;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.minio.errors.*;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Transient;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @Data
 public abstract class ResourceDecorator  implements ResourceObj {
 
     private StorageType storageType;
     @Transient
-    private InputStream stream;
+    private ResourceObj resourceObj;
 
+    public ResourceDecorator(ResourceObj resourceObj) {
+        this.resourceObj = resourceObj;
+    }
 
     public ResourceDecorator(StorageType storageType) {
         this.storageType = storageType;
@@ -25,13 +27,13 @@ public abstract class ResourceDecorator  implements ResourceObj {
 
     @Override
     public InputStream read() throws IOException {
-        return stream;
+        return this.resourceObj.read();
     }
 
     public ResourceDecorator() {
     }
 
-    public void save(InputStream stream) throws IOException {
-        this.stream = stream;
+    public void save(InputStream stream) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        resourceObj.save(stream);
     }
 }

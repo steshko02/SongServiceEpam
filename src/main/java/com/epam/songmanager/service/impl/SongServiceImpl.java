@@ -36,8 +36,9 @@ public class SongServiceImpl implements SongService {
     @Override
     public org.springframework.core.io.Resource getSongAsResource(Long id){
         Song song = getById(id);
-       return  serviceSwitcher.getByType(song.getResource().getType()).
-                getResource(song.getResource().getPath());
+//       return  serviceSwitcher.getByType(song.getResource().getType()).
+//                getResource(song.getResource().getPath());
+        return null;
     }
 
     @Override

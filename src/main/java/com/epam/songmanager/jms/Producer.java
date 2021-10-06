@@ -14,7 +14,6 @@ public class Producer {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-
     public void sendMessage(String message) {
         jmsTemplate.convertAndSend("resources", message);
         log.info("send message: " + message);

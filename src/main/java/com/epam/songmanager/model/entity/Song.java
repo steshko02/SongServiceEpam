@@ -28,6 +28,8 @@ public class Song {
     @JoinColumn(name = "resource_id")
     private  Resource resource;
 
+    private  String resourceObjId;
+
     public Song(){
     }
 

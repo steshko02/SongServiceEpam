@@ -2,7 +2,6 @@ package com.epam.songmanager.service.interfaces;
 
 
 import com.epam.songmanager.model.entity.StorageType;
-import com.epam.songmanager.model.resource.ResourceDecorator;
 import com.epam.songmanager.model.resource.ResourceObj;
 import io.minio.errors.*;
 import org.springframework.core.io.Resource;
@@ -14,7 +13,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public interface StorageService<T extends ResourceDecorator> {
+public interface StorageService<T extends ResourceObj> {
 
     String store(InputStream entity) throws IOException, NoSuchAlgorithmException, ServerException, InsufficientDataException, InternalException, InvalidResponseException, InvalidKeyException, XmlParserException, ErrorResponseException;
 

@@ -2,35 +2,39 @@ package com.epam.songmanager.facades;
 
 
 import com.epam.songmanager.config.properties.FileProperties;
+import com.epam.songmanager.exceptions.CheckSumException;
 import com.epam.songmanager.exceptions.FileParseException;
 import com.epam.songmanager.model.entity.Resource;
 import com.epam.songmanager.model.entity.Song;
+import com.epam.songmanager.model.resource.ResourceObj;
+import com.epam.songmanager.model.storage.Storage;
+import com.epam.songmanager.repository.mango.StorageRepository;
 import com.epam.songmanager.service.interfaces.AlbumService;
 import com.epam.songmanager.service.interfaces.ResourceService;
 import com.epam.songmanager.service.interfaces.SongService;
-import com.epam.songmanager.service.interfaces.StorageSwitcher;
 import com.epam.songmanager.service.parsers.AudioParser;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import com.epam.songmanager.service.parsers.Mp3Metadata;
+import com.epam.songmanager.utils.CheckSumImpl;
+import com.epam.songmanager.utils.UnzipUtils;
+import org.apache.commons.io.input.CountingInputStream;
 import org.farng.mp3.TagException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.jms.annotation.JmsListener;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
 
 @Service
 @Transactional
 @EnableConfigurationProperties(FileProperties.class)
-
 public class CreateSong {
-
-    private final  String fileExtension;
+    private final String messageDigest = "MD5";
 
     @Autowired
     private ResourceService resourceService;
@@ -45,49 +49,61 @@ public class CreateSong {
     private SongService songService;
 
     @Autowired
-    private StorageSwitcher serviceStorageSwitcher;
+    private StorageRepository storageRepository;
 
-    @Autowired
-    public CreateSong(FileProperties fileProperties) {
-        this.fileExtension = fileProperties.getFileExtension();
-    }
-
-    @JmsListener(destination = "resources")
-    @SendTo("zip")
-    public String init(String message) throws Exception {
-            Resource resource = resourceService.get(Long.valueOf(message));
-            InputStream is = serviceStorageSwitcher.getByType(resource.getType()).
-                    loadAsResource(resource.getPath()).getInputStream();
-
-            createSong(resource, createTmpFileForParse(is));
-
-            return "Resource " + message+ " parsed";
-    }
-
-
-    private  File createTmpFileForParse(InputStream stream) throws IOException {
-        File tmpFile = File.createTempFile("data", fileExtension);
-        try  {
-            IOUtils.copy(stream,new FileOutputStream(tmpFile));
-            stream.close();
-            return  tmpFile;
+    public  void  saveSong(ResourceObj resourceObj){
+        try(BufferedInputStream stream = new BufferedInputStream(resourceObj.read())) {
+            if(UnzipUtils.isZip(stream)){
+                Storage storage = storageRepository.getStorageById(resourceObj.getStorageId());
+                UnzipUtils.unzip(stream, x-> {
+                    ResourceObj innerResource = storage.createNewResource();
+                    try {
+                        innerResource.save(new ByteArrayInputStream(x.toByteArray()));
+                        createSong(innerResource);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+                resourceObj.delete();
+            }else{
+                createSong(resourceObj);
+            }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        finally {
-            tmpFile.delete();
+
+    }
+
+    private Resource createResource(InputStream stream,String path) throws Exception {
+        MessageDigest md = MessageDigest.getInstance(messageDigest);
+        try (CountingInputStream is =new CountingInputStream(new DigestInputStream(stream,md))){
+            String checkSumRes = CheckSumImpl.create(md);
+            if(!resourceService.ifExistsByCheckSum(checkSumRes)){
+               return new Resource(path,is.getByteCount(),checkSumRes);
+            }
+            else {
+                throw  new CheckSumException("there is this song...");
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
         return null;
     }
 
-    private void createSong(Resource resource, File tmp) throws Exception {
-        try {
+    public void createSong(ResourceObj resourceObj) throws Exception {
+        try(InputStream stream = resourceObj.read()) {
+            Mp3Metadata metadata = mp3Parser.getMetadata(stream);
             Song song = new Song();
-            song.setName(mp3Parser.getName(tmp));
-            song.setAlbum(albumService.findByName(mp3Parser.getAlbum(tmp)));
-            song.setNotes(mp3Parser.getNotes(tmp));
-            song.setYear(mp3Parser.getYear(tmp));
-            song.setResource(resource);
+            song.setName(metadata.getName());
+            song.setResource(createResource(stream,resourceObj.getPath()));
+            song.setAlbum(albumService.findByName(metadata.getAlbum()));
+            song.setNotes(metadata.getNotes());
+            song.setYear(metadata.getYear());
+            song.setResourceObjId(resourceObj.getId());
             songService.addSong(song);
         } catch (IOException | TagException e) {
             throw new Exception("Error: " + e);

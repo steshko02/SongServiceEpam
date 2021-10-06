@@ -10,14 +10,18 @@ import java.util.List;
 
 @Service
 public class CreateFileSwitcherImpl implements CreateFileSwitcher {
-
-    @Autowired
-    private List<CreateResource> createResources;
-
     @Override
     public CreateResource<?> getByType(StorageType storageType) {
-        return createResources.stream().filter(s -> s.supports(storageType)).
-                findAny().
-                orElseThrow(null);
+        return null;
     }
+
+//    @Autowired
+//    private List<CreateResource> createResources;
+//
+//    @Override
+//    public CreateResource<?> getByType(StorageType storageType) {
+//        return createResources.stream().filter(s -> s.supports(storageType)).
+//                findAny().
+//                orElseThrow(null);
+//    }
 }

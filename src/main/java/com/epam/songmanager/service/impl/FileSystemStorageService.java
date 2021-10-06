@@ -29,18 +29,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-@EnableConfigurationProperties(LocationProperties.class)
 @Service
 public class FileSystemStorageService implements StorageService<FileStorageEntity> {
 
     private final  StorageType storageType = StorageType.DISK_FILE_SYSTEM;
 
-    private final Path rootLocation ;
-
-    @Autowired
-    public FileSystemStorageService(  LocationProperties locationProperties) {
-        this.rootLocation = Paths.get(locationProperties.getLocation());
-    }
+    //private final Path rootLocation  = Paths.get("C:\\Users\\Admin\\Desktop\\Song");
 
     public String store(InputStream stream) throws IOException {
         if (stream.available()==0) {
@@ -57,7 +51,8 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
         UUID uuid = UUID.randomUUID();
         String uuidAsString = uuid.toString();
         Path destinationFile = Paths.get(uuidAsString+".mp3");
-        return rootLocation.resolve(destinationFile);
+       // return rootLocation.resolve(destinationFile);
+        return  null;
     }
 
     private void createFiles(InputStream stream, String path) throws IOException {
@@ -71,24 +66,25 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
 
     @Override
     public List<String> loadAll() {
-        try {
-         List<Path> paths = Files.walk(rootLocation, 1)
-                    .filter(p -> !p.equals(rootLocation))
-                    .map(rootLocation::relativize).collect(Collectors.toList());
+
+//         List<Path> paths = Files.walk(rootLocation, 1)
+//                    .filter(p -> !p.equals(rootLocation))
+//                    .map(rootLocation::relativize).collect(Collectors.toList());
          List<String> stringPaths = new LinkedList<>();
 
-         paths.forEach(p->stringPaths.add(p.toString()));
+//         paths.forEach(p->stringPaths.add(p.toString()));
 
              return  stringPaths;
-        }
-        catch (IOException e) {
-            throw new StorageException("Failed to read stored files", e);
-        }
+
+//        catch (IOException e) {
+//            throw new StorageException("Failed to read stored files", e);
+//        }
     }
 
     @Override
     public Path load(String filename) {
-        return rootLocation.resolve(filename);
+        //return rootLocation.resolve(filename);
+        return null;
     }
 
     @Override
@@ -112,7 +108,7 @@ public class FileSystemStorageService implements StorageService<FileStorageEntit
     @Override
     public void deleteAll() {
 
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+        //FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 
     @Override

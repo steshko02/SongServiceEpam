@@ -24,21 +24,16 @@ public  class Resource {
 
     private  String checksum;
 
-    @Enumerated(EnumType.STRING)
-    private  StorageType type;
-
-    public Resource(String path, long size, String checksum, StorageType type) {
-        this.path = path;
-        this.size = size;
-        this.checksum = checksum;
-        this.type = type;
-    }
+//    @Enumerated(EnumType.STRING)
+//    private  StorageType type;
 
     public Resource(String path, long size, String checksum) {
         this.path = path;
         this.size = size;
         this.checksum = checksum;
+//        this.type = type;
     }
+
 
     @Override
     public boolean equals(Object o) {

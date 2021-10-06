@@ -1,10 +1,9 @@
 package com.epam.songmanager.config.converter;
 
-import com.epam.songmanager.repository.converter.MapJsonToResourceObj;
+import com.epam.songmanager.service.converters.MapJsonToResourceObj;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
-
 import java.util.Arrays;
 
 @Configuration
