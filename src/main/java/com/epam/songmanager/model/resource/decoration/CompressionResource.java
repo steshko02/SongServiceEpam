@@ -38,40 +38,41 @@ public class CompressionResource extends ResourceDecorator {
 
     @Override
     public void setStorageId(String storageId) {
+        super.setStorageId(storageId);
     }
 
     @Override
     public String getId() {
-        return null;
+        return super.getId();
     }
 
     @Override
     public String getStorageId() {
-        return null;
+        return super.getStorageId();
     }
 
     @Override
     public String getPath() {
-        return null;
+        return super.getPath();
     }
 
     @Override
     public void delete() {
-
+        super.delete();
     }
 
     @Override
     public void setPath(String path) {
-
+        super.setPath(path);
     }
 
     @Override
     public Class<? extends ResourceObj> supports() {
-        return null;
+        return super.supports();
     }
 
     @Override
     public String getFileName() {
-        return null;
+        return super.getFileName();
     }
 }

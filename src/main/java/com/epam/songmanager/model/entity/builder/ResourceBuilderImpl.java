@@ -1,7 +1,7 @@
 package com.epam.songmanager.model.entity.builder;
 
 import com.epam.songmanager.model.resource.ResourceObj;
-import com.epam.songmanager.model.resource.decoration.UnzipResource;
+import com.epam.songmanager.model.resource.decoration.CompressionResource;
 
 public class ResourceBuilderImpl implements ResourceBuilder{
 
@@ -12,14 +12,9 @@ public class ResourceBuilderImpl implements ResourceBuilder{
     }
 
     @Override
-    public ResourceBuilder withUnzip() {
-            resourceObj = new UnzipResource(resourceObj);
-        return this;
-    }
-
-    @Override
     public ResourceBuilder withCompression() {
-        return this;
+        resourceObj = new CompressionResource(resourceObj);
+        return  this;
     }
 
     @Override

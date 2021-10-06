@@ -1,21 +1,13 @@
 package com.epam.songmanager.model.storage;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.model.entity.builder.ResourceBuilder;
+import com.epam.songmanager.model.entity.builder.ResourceBuilderImpl;
 import com.epam.songmanager.model.resource.CloudStorageEntity;
-import com.epam.songmanager.model.resource.FileStorageEntity;
 import com.epam.songmanager.model.resource.ResourceObj;
-import com.epam.songmanager.repository.mango.ResourceRepository;
-import io.minio.MinioClient;
 import lombok.Data;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.stereotype.Component;
-
-import javax.persistence.Transient;
 
 @Data
 @Document
@@ -25,7 +17,7 @@ public class MinioStorage implements Storage{
     private String id;
     private  String  bucket;
     private StorageType storageType  = StorageType.CLOUD_SYSTEM;
-//for client
+
     private String URL ;
     private String accessKey;
     private  String secretKey;
@@ -64,6 +56,6 @@ public class MinioStorage implements Storage{
 
     @Override
     public ResourceBuilder requestBuilder() {
-        return null;
+        return new ResourceBuilderImpl(createNewResource());
     }
 }

@@ -2,6 +2,7 @@ package com.epam.songmanager.model.storage;
 
 import com.epam.songmanager.model.entity.StorageType;
 import com.epam.songmanager.model.entity.builder.ResourceBuilder;
+import com.epam.songmanager.model.entity.builder.ResourceBuilderImpl;
 import com.epam.songmanager.model.resource.FileStorageEntity;
 import com.epam.songmanager.model.resource.ResourceObj;
 import lombok.Data;
@@ -40,7 +41,7 @@ public class FSStorage implements Storage{
 
     @Override
     public ResourceBuilder requestBuilder() {
-        return null;
+        return new ResourceBuilderImpl(createNewResource());
     }
 
 }

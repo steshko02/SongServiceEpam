@@ -39,7 +39,7 @@ public class ResourceObjService implements ResourceObjectService {
 
     public void store(InputStream inputStream,StorageType storageType,String ex) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         Storage storage = storageRepository.getStorage(storageType);
-        ResourceObj resource = storage.createNewResource();
+        ResourceObj resource = storage.requestBuilder().withCompression().build();
         resourceObjRepository.saveResource(resource);
         resource.save(inputStream);
         producer.sendMessage(resource.getId());

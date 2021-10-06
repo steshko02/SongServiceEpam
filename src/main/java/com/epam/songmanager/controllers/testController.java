@@ -54,8 +54,8 @@ public class testController {
         InputStream compStream = operations.compressInputStream(stream1);
 
         System.out.println("--------------------------------------");
-        System.out.println(compStream.readAllBytes().length);
         System.out.println(stream2.readAllBytes().length);
+        System.out.println(operations.decompressInputStream(compStream).readAllBytes().length);
         System.out.println("--------------------------------------");
         return "audio";
     }
