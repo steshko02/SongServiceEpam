@@ -1,4 +1,4 @@
-package com.epam.songmanager.model.entity.builder;
+package com.epam.songmanager.model.storage.builder;
 
 import com.epam.songmanager.model.resource.ResourceObj;
 import com.epam.songmanager.model.resource.decoration.CompressionResource;
@@ -13,7 +13,8 @@ public class ResourceBuilderImpl implements ResourceBuilder{
 
     @Override
     public ResourceBuilder withCompression() {
-        resourceObj = new CompressionResource(resourceObj);
+        CompressionResource compressionResource = new CompressionResource(resourceObj);
+        this.resourceObj = compressionResource;
         return  this;
     }
 

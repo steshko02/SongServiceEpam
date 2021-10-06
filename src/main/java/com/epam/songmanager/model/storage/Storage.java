@@ -1,7 +1,7 @@
 package com.epam.songmanager.model.storage;
 
 import com.epam.songmanager.model.entity.StorageType;
-import com.epam.songmanager.model.entity.builder.ResourceBuilder;
+import com.epam.songmanager.model.storage.builder.ResourceBuilder;
 import com.epam.songmanager.model.resource.ResourceObj;
 
 public interface Storage {

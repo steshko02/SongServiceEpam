@@ -6,25 +6,18 @@ import com.epam.songmanager.model.resource.ResourceObj;
 import com.epam.songmanager.model.storage.Storage;
 import com.epam.songmanager.repository.mango.ResourceObjRepository;
 import com.epam.songmanager.repository.mango.StorageRepository;
-import com.epam.songmanager.service.interfaces.CreateFileSwitcher;
 import com.epam.songmanager.service.interfaces.ResourceObjectService;
-import com.epam.songmanager.service.interfaces.StorageService;
 import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Primary
@@ -46,7 +39,11 @@ public class ResourceObjService implements ResourceObjectService {
     }
 
     public  List<String> loadAll(StorageType storageType) throws IOException {
-        return null;
+        Storage storage = storageRepository.getStorage(storageType);
+        List<ResourceObj> resources = resourceObjRepository.getByStorageId(storage.getId());
+        List<String> filenames = new ArrayList<>();
+        resources.stream().forEach(x->filenames.add(x.getFileName()));
+       return filenames;
     }
 
     @Override

@@ -36,10 +36,18 @@ public class ResourceObjRepository implements ResourceRepository{
         Query query = new Query(Criteria.where("_id").is(convertToObjectId(id)));
         return mongoTemplate.findOne(query, ResourceObj.class,"res_song");
     }
+
    private Object convertToObjectId(String  id) {
         if (id instanceof String && ObjectId.isValid(id)) {
             return new ObjectId(id);
         }
         return id;
     }
+
+   @Override
+   public  List<ResourceObj> getByStorageId(String  storageId){
+       Query q = new Query();
+       q.addCriteria(Criteria.where("storageId").is(storageId));
+       return mongoTemplate.find(q, ResourceObj.class,"res_song");
+   }
 }

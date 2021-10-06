@@ -34,9 +34,9 @@ public class FileUploadController {
     @GetMapping("/")
     public String listUploadedFiles(@NotNull Model model, @RequestParam(required=false,name ="st") StorageType storageType) {
         if(storageType == null)
-            storageType = StorageType.CLOUD_SYSTEM;
+            storageType = StorageType.DISK_FILE_SYSTEM;
         model.addAttribute("storage", storageType);
-//        model.addAttribute("files", resourceObjService.loadAll(storageType));
+        model.addAttribute("files", resourceObjService.loadAll(storageType));
         return "uploadForm";
     }
 

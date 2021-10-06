@@ -4,7 +4,6 @@ import com.epam.songmanager.model.entity.StorageType;
 import io.minio.errors.*;
 import lombok.Data;
 
-import javax.persistence.Transient;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -13,8 +12,9 @@ import java.security.NoSuchAlgorithmException;
 @Data
 public abstract class ResourceDecorator  implements ResourceObj {
 
+
     private StorageType storageType;
-    @Transient
+
     private ResourceObj resourceObj;
 
     public ResourceDecorator(ResourceObj resourceObj) {

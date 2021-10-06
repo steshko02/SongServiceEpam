@@ -9,10 +9,10 @@ import java.util.Arrays;
 @Configuration
 public class MongoConverter  {
 
-    @Bean
-    public MongoCustomConversions mongoCustomConversions() {
-        return new MongoCustomConversions(
-                Arrays.asList(
-                        new MapJsonToResourceObj()));
-    }
+//    @Bean
+//    public MongoCustomConversions mongoCustomConversions() {
+//        return new MongoCustomConversions(
+//                Arrays.asList(
+//                        new MapJsonToResourceObj()));
+//    }
 }
