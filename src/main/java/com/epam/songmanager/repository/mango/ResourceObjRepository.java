@@ -47,7 +47,8 @@ public class ResourceObjRepository implements ResourceRepository{
    @Override
    public  List<ResourceObj> getByStorageId(String  storageId){
        Query q = new Query();
-       q.addCriteria(Criteria.where("storageId").is(storageId));
+       Criteria criteria = new Criteria();
+       q.addCriteria(criteria.orOperator(Criteria.where("delegate.storageId").is(storageId),Criteria.where("storageId").is(storageId)));
        return mongoTemplate.find(q, ResourceObj.class,"res_song");
    }
 }
