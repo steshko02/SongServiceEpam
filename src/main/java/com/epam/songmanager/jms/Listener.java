@@ -9,8 +9,6 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
-import java.io.InputStream;
-
 @Component
 @Slf4j
 public class Listener {

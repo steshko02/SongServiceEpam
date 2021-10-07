@@ -29,7 +29,8 @@ public class SongController {
     @RequestMapping(value = "songs/{songId}", method = RequestMethod.GET, produces = {
             MediaType.APPLICATION_OCTET_STREAM_VALUE })
     public ResponseEntity<Resource> playAudio(@PathVariable("songId") Long songId) throws EntityNotFoundException {
-        Resource resource = songService.getSongAsResource(songId);
+        Song song = songService.getById(songId);
+        Resource resource = new ByteArrayResource(resourceObjService.getResource(song.getResourceObjId()).read().readAllBytes());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentLength(resource.contentLength());
         httpHeaders.setCacheControl(CacheControl.noCache().getHeaderValue());

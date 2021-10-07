@@ -78,13 +78,11 @@ public class CreateSong {
 
     }
 
-    private Resource createResource(InputStream stream,String path) throws Exception {
-        MessageDigest md = MessageDigest.getInstance(messageDigest);
-        try ( BufferedInputStream bis = new BufferedInputStream(stream);
-                CountingInputStream is =new CountingInputStream(new DigestInputStream(bis,md))){
+    private Resource createResource(String path,Long size, MessageDigest md) throws Exception {
+        try {
             String checkSumRes = CheckSumImpl.create(md);
             if(!resourceService.ifExistsByCheckSum(checkSumRes)){
-               return new Resource(path,is.getByteCount(),checkSumRes);
+               return new Resource(path,size,checkSumRes);
             }
             else {
                 throw  new CheckSumException("there is this song...");
@@ -96,10 +94,12 @@ public class CreateSong {
     }
 
     public void createSong(ResourceObj resourceObj) throws Exception {
-        try(InputStream stream = resourceObj.read()) {
+        MessageDigest md = MessageDigest.getInstance(messageDigest);
+        try(BufferedInputStream bis = new BufferedInputStream(resourceObj.read());
+            CountingInputStream is =new CountingInputStream(new DigestInputStream(bis,md))) {
+            Mp3Metadata metadata = mp3Parser.getMetadata(is);
             Song song = new Song();
-            song.setResource(createResource(stream,resourceObj.getPath()));
-            Mp3Metadata metadata = mp3Parser.getMetadata(resourceObj.read());
+            song.setResource(createResource(resourceObj.getPath(),is.getByteCount(),md));
             song.setName(metadata.getName());
             song.setAlbum(albumService.findByName(metadata.getAlbum()));
             song.setNotes(metadata.getNotes());
