@@ -8,20 +8,6 @@ import java.util.zip.GZIPOutputStream;
 
 public class GZIPCompressionOperations implements CompressionOperation {
 
-//    @Override
-//    public InputStream compressInputStream(InputStream inputStreamToCompress) throws IOException {
-//        PipedOutputStream pipedOS = new PipedOutputStream();
-//        PipedInputStream pipedIS = new PipedInputStream();
-//        pipedOS.connect(pipedIS);
-//        BufferedInputStream bufferedInputStream = new BufferedInputStream(pipedIS);
-//
-//        try (GZIPOutputStream gzipOutputStream =new GZIPOutputStream(new BufferedOutputStream(pipedOS))) {
-//
-//                gzipOutputStream.write(inputStreamToCompress.readAllBytes());
-//
-//            return bufferedInputStream;
-//        }
-//    }
     public InputStream compressInputStream(InputStream inputStreamToCompress) {
         final PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream();

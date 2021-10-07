@@ -56,7 +56,7 @@ public class CreateSong {
             if(UnzipUtils.isZip(stream)){
                 Storage storage = storageRepository.getStorageById(resourceObj.getStorageId());
                 UnzipUtils.unzip(stream, x-> {
-                    ResourceObj innerResource = storage.createNewResource();
+                    ResourceObj innerResource = storage.requestBuilder().withCompression().build();
                     try {
                         innerResource.save(new ByteArrayInputStream(x.toByteArray()));
                         createSong(innerResource);
@@ -80,7 +80,8 @@ public class CreateSong {
 
     private Resource createResource(InputStream stream,String path) throws Exception {
         MessageDigest md = MessageDigest.getInstance(messageDigest);
-        try (CountingInputStream is =new CountingInputStream(new DigestInputStream(stream,md))){
+        try ( BufferedInputStream bis = new BufferedInputStream(stream);
+                CountingInputStream is =new CountingInputStream(new DigestInputStream(bis,md))){
             String checkSumRes = CheckSumImpl.create(md);
             if(!resourceService.ifExistsByCheckSum(checkSumRes)){
                return new Resource(path,is.getByteCount(),checkSumRes);
@@ -96,10 +97,10 @@ public class CreateSong {
 
     public void createSong(ResourceObj resourceObj) throws Exception {
         try(InputStream stream = resourceObj.read()) {
-            Mp3Metadata metadata = mp3Parser.getMetadata(stream);
             Song song = new Song();
-            song.setName(metadata.getName());
             song.setResource(createResource(stream,resourceObj.getPath()));
+            Mp3Metadata metadata = mp3Parser.getMetadata(resourceObj.read());
+            song.setName(metadata.getName());
             song.setAlbum(albumService.findByName(metadata.getAlbum()));
             song.setNotes(metadata.getNotes());
             song.setYear(metadata.getYear());
