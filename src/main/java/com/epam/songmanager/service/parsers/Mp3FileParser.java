@@ -31,8 +31,7 @@ public class Mp3FileParser implements AudioParser {
        }
        return null;
    }
-
-    public Mp3Metadata getMetadata(InputStream stream) throws TagException, FileParseException, IOException {
+   public Mp3Metadata getMetadata(InputStream stream) throws TagException, FileParseException, IOException {
         File file = createTmpFile(stream);
         MP3File mp3File  = new MP3File(file);
         AbstractID3v2 abstractID3v2 = create(mp3File);
@@ -51,34 +50,33 @@ public class Mp3FileParser implements AudioParser {
 
     private String getName(AbstractID3v2 abstractID3v2) throws FileParseException {
         String name =abstractID3v2.getSongTitle();
-//        if(name == null|| name.isEmpty()){
-//            throw new FileParseException(Mp3FileParser.class);
-//        }
+        if(name == null|| name.isEmpty()){
+            throw new FileParseException(Mp3FileParser.class);
+        }
         return name;
     }
 
     private String getAlbum(AbstractID3v2 abstractID3v2) throws FileParseException {
         String album = abstractID3v2.getAlbumTitle();
-//        if(album == null || album.isEmpty()){
-//            throw new FileParseException(Mp3FileParser.class);
-//        }
+        if(album == null || album.isEmpty()){
+            throw new FileParseException(Mp3FileParser.class);
+        }
         return album;
     }
 
     private int getYear(AbstractID3v2 abstractID3v2) throws FileParseException {
         String year = abstractID3v2.getYearReleased();
         if(year == null || year.isEmpty()){
-//            throw new FileParseException(Mp3FileParser.class);
-            return  0;
+            throw new FileParseException(Mp3FileParser.class);
         }
         return Integer.parseInt(year);
     }
 
     private String getNotes(AbstractID3v2 abstractID3v2) throws FileParseException{
         String notes = abstractID3v2.getSongComment();
-//        if(notes == null || notes.isEmpty()){
-//            throw new FileParseException(Mp3FileParser.class);
-//        }
+        if(notes == null || notes.isEmpty()){
+            throw new FileParseException(Mp3FileParser.class);
+        }
         return notes;
     }
 }
